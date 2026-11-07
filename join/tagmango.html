@@ -1,0 +1,1605 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF8F2;
+  --bg-alt: #F5EFE4;
+  --card: #FFFFFF;
+  --ink: #1F1929;
+  --muted: #655D72;
+  --purple: #4A0D80;
+  --purple-light: #6B21A8;
+  --indigo: #23133D;
+  --indigo-deep: #160B28;
+  --gold: #B88214;
+  --gold-bright: #F3C969;
+  --gold-soft: #F9EED7;
+  --line: #E4DCEA;
+  --lilac: #F3ECFA;
+  --good: #1F6344;
+  --good-bg: #E7F6EE;
+  --pink: #BE3B62;
+  --bad-bg: #FDECEF;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16.5px/1.62 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  padding-bottom: 92px;
+  overflow-x: hidden;
+}
+h1, h2, h3, .serif {
+  font-family: 'Fraunces', Georgia, serif;
+  color: var(--indigo);
+  line-height: 1.15;
+  margin: 0;
+}
+h1 { font-size: clamp(32px, 5vw, 52px); letter-spacing: -0.8px; margin: 14px 0 16px; }
+h2 { font-size: clamp(26px, 3.6vw, 38px); letter-spacing: -0.4px; margin: 0 0 14px; }
+h3 { font-size: clamp(19px, 2.2vw, 23px); margin: 0 0 8px; }
+p { margin: 0 0 14px; }
+a { color: var(--purple); }
+img.sketch {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid #E5D9CC;
+  box-shadow: 0 10px 28px rgba(35, 19, 61, 0.08);
+  display: block;
+  margin: 16px 0;
+}
+.wrap { max-width: 1040px; margin: auto; padding: 0 20px; }
+.wrap-sm { max-width: 820px; margin: auto; padding: 0 20px; }
+
+/* Keyframe Animations */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(184, 130, 20, 0.45), 0 10px 28px rgba(74, 13, 128, 0.28); }
+  50% { box-shadow: 0 0 0 10px rgba(184, 130, 20, 0), 0 14px 34px rgba(74, 13, 128, 0.38); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: translateY(10px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Top Sticky Navbar */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(251, 248, 242, 0.92);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+.top .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  gap: 12px;
+}
+.brand {
+  font-weight: 800;
+  color: var(--purple);
+  font-size: 22px;
+  letter-spacing: -0.6px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--indigo), var(--purple));
+  color: var(--gold-bright);
+  display: grid;
+  place-items: center;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 18px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(74, 13, 128, 0.2);
+}
+.brand small {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.top-nav { display: flex; align-items: center; gap: 18px; }
+.top-nav a.nav-link {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+.top-nav a.nav-link:hover { color: var(--purple); }
+.top-cta {
+  background: linear-gradient(135deg, var(--purple), var(--indigo));
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 13.5px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(74, 13, 128, 0.22);
+  white-space: nowrap;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  padding: 44px 0 48px;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(107, 33, 168, 0.09), transparent 42%),
+    radial-gradient(circle at 85% 20%, rgba(184, 130, 20, 0.12), transparent 40%),
+    linear-gradient(180deg, #FBF8F2 0%, #F4ECE0 100%);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+.hero-center { text-align: center; max-width: 840px; margin: 0 auto; }
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #DEC9F2;
+  color: var(--purple);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(74, 13, 128, 0.06);
+}
+.pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+}
+.hero h1 span.grad {
+  background: linear-gradient(120deg, var(--purple) 0%, #9333EA 50%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .lead {
+  font-size: clamp(17px, 2.1vw, 20px);
+  color: #433A52;
+  max-width: 720px;
+  margin: 0 auto 24px;
+}
+
+/* Interactive Practice Transformer in Hero */
+.transformer {
+  background: #fff;
+  border: 2px solid #D8C4EE;
+  border-radius: 22px;
+  padding: 20px;
+  margin: 22px auto 26px;
+  box-shadow: 0 18px 46px rgba(35, 19, 61, 0.1);
+  text-align: left;
+}
+.tr-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.tr-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--purple);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rtabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.rtab {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 13px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.rtab:hover { border-color: var(--purple); color: var(--purple); }
+.rtab.on {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(74, 13, 128, 0.22);
+}
+.tr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 14px;
+  margin-top: 16px;
+  animation: popIn 0.28s ease-out;
+}
+.tr-box {
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+}
+.tr-box.before {
+  background: var(--bad-bg);
+  border-color: #F3C4CE;
+}
+.tr-box.after {
+  background: linear-gradient(145deg, #23133D 0%, #3E116B 100%);
+  color: #fff;
+  border-color: #4A0D80;
+  position: relative;
+}
+.tr-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.tr-box.before .tr-tag { background: #F9D5DD; color: #9B2344; }
+.tr-box.after .tr-tag { background: rgba(243, 201, 105, 0.2); color: var(--gold-bright); border: 1px solid rgba(243, 201, 105, 0.4); }
+.offer-pair-pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.op-pill {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 9px 11px;
+}
+.op-pill small {
+  display: block;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold-bright);
+  font-weight: 700;
+}
+.op-pill strong {
+  display: block;
+  font-size: 14px;
+  color: #fff;
+  margin-top: 2px;
+}
+
+/* Primary CTA Buttons */
+.btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(135deg, #581296 0%, #2D1254 100%);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 19px;
+  padding: 18px 26px;
+  border-radius: 16px;
+  animation: pulseGlow 3s infinite;
+  transition: transform 0.15s, filter 0.15s;
+  border: 1px solid rgba(243, 201, 105, 0.35);
+  cursor: pointer;
+}
+.btn:hover { filter: brightness(1.09); transform: translateY(-2px); }
+.btn small {
+  display: block;
+  font-weight: 500;
+  font-size: 13px;
+  color: #EBDDF8;
+  margin-top: 4px;
+}
+.btn.gold {
+  background: linear-gradient(135deg, #CA8A04 0%, #9A6708 100%);
+  border-color: #FDE047;
+}
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 24px;
+  margin-top: 16px;
+  font-size: 13.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Infinite Scrolling Ticker */
+.marquee-wrap {
+  background: var(--indigo-deep);
+  color: #fff;
+  padding: 13px 0;
+  overflow: hidden;
+  border-bottom: 2px solid var(--gold);
+  white-space: nowrap;
+}
+.marquee-track {
+  display: inline-flex;
+  gap: 32px;
+  animation: marquee 28s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #F3E8FF;
+}
+.marquee-item b { color: var(--gold-bright); }
+
+/* Sections & Cards */
+section { padding: 58px 0; border-bottom: 1px solid var(--line); }
+section.alt { background: var(--bg-alt); }
+section.dark-sec {
+  background: linear-gradient(160deg, var(--indigo-deep) 0%, #2B124C 100%);
+  color: #fff;
+}
+section.dark-sec h2, section.dark-sec h3 { color: #fff; }
+.kicker {
+  display: inline-block;
+  font-size: 11.5px;
+  letter-spacing: 1.8px;
+  font-weight: 800;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.sec-head { text-align: center; max-width: 740px; margin: 0 auto 32px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(35, 19, 61, 0.04);
+}
+.card.lilac { background: var(--lilac); border-color: #D7C6EC; }
+.card.gold { background: var(--gold-soft); border-color: #E6CE9A; }
+.card.dark { background: var(--indigo); color: #fff; border-color: #3E2468; }
+.card.dark h3 { color: #fff; }
+
+/* WhatsApp Relapse Chat Simulation */
+.wa-phone {
+  background: #ECE5DD;
+  border: 6px solid #23133D;
+  border-radius: 26px;
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(35, 19, 61, 0.16);
+}
+.wa-top {
+  background: #075E54;
+  color: #fff;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.wa-av {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #075E54;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+.wa-body { padding: 16px; display: grid; gap: 10px; font-size: 14px; }
+.wa-tag {
+  justify-self: center;
+  background: #D9FDD3;
+  color: #1F4E2E;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+.wa-tag.warn { background: #FDECEF; color: #9B2344; }
+.wa-msg {
+  background: #fff;
+  color: #111;
+  padding: 10px 13px;
+  border-radius: 0 12px 12px 12px;
+  max-width: 88%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  line-height: 1.45;
+}
+.wa-msg.me {
+  justify-self: end;
+  background: #DCF8C6;
+  border-radius: 12px 0 12px 12px;
+}
+.wa-time { display: block; font-size: 10.5px; color: #667781; text-align: right; margin-top: 3px; }
+
+/* Interactive Layer Lens Simulator */
+.sim-box {
+  background: #fff;
+  color: var(--ink);
+  border-radius: 22px;
+  padding: 26px;
+  border: 2px solid var(--gold-bright);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+}
+.sim-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
+.sim-btn {
+  border: 1px solid #D5C5E8;
+  background: var(--lilac);
+  color: var(--purple);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sim-btn.on {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+}
+.lrow {
+  display: grid;
+  grid-template-columns: 92px 1fr 90px;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+  font-size: 14.5px;
+}
+.cells {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+}
+.cells i {
+  height: 24px;
+  border-radius: 5px;
+  background: #ECE6F2;
+  display: block;
+  transition: background 0.25s, transform 0.2s;
+}
+.cells.m i.f { background: #4A0D80; transform: scaleY(1.04); }
+.cells.e i.f { background: #C0486A; transform: scaleY(1.04); }
+.cells.n i.f { background: #B88214; transform: scaleY(1.04); }
+.sim-verdict {
+  background: var(--gold-soft);
+  border-left: 5px solid var(--gold);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 16px;
+  font-size: 14.5px;
+}
+
+/* Studio 4-Tab Tour */
+.tour-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 22px 0 14px;
+}
+.ttab {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #E9D8FD;
+  padding: 11px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s;
+}
+.ttab.on {
+  background: var(--gold-bright);
+  color: var(--indigo-deep);
+  border-color: var(--gold-bright);
+}
+.tour-panel {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  padding: 22px;
+}
+
+/* Interactive Session Trap Calculator */
+.calc-wrap {
+  background: #fff;
+  border: 2px solid #D8C6EC;
+  border-radius: 22px;
+  padding: 26px;
+  box-shadow: 0 14px 36px rgba(35, 19, 61, 0.08);
+}
+.slider-row { margin-bottom: 16px; }
+.slider-head {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 14.5px;
+  margin-bottom: 6px;
+}
+.slider-val { color: var(--purple); font-weight: 800; font-size: 16px; }
+input[type=range] {
+  width: 100%;
+  accent-color: var(--purple);
+  height: 8px;
+  cursor: pointer;
+}
+.calc-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 18px;
+}
+.calc-card {
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+}
+.calc-card.trap { background: var(--bad-bg); border-color: #F2BNC9; }
+.calc-card.sig { background: var(--good-bg); border-color: #A7F3D0; }
+.big-num {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 32px;
+  font-weight: 800;
+  display: block;
+  margin: 4px 0;
+}
+
+/* 5 Modules Visual Timeline */
+.mod-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 18px;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 18px;
+  align-items: start;
+  box-shadow: 0 8px 24px rgba(35, 19, 61, 0.04);
+}
+.mod-badge {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--purple), var(--indigo));
+  color: var(--gold-bright);
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 22px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+.mod-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.mpill {
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--lilac);
+  color: var(--purple);
+}
+.mpill.gold { background: var(--gold-soft); color: #784F04; }
+
+/* Practitioner Proof Cards */
+.proof-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.rev-jump {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold-soft);
+  border: 1px solid #E6CE9A;
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 13.5px;
+  color: var(--indigo);
+  margin-bottom: 12px;
+}
+.rev-jump span.arr { color: var(--gold); font-size: 16px; }
+
+/* Checklist & Value Table */
+.list { margin: 0; padding: 0; list-style: none; }
+.list li {
+  position: relative;
+  padding: 9px 0 9px 32px;
+  border-bottom: 1px dashed var(--line);
+}
+.list li:last-child { border: 0; }
+.list li:before {
+  content: '✓';
+  position: absolute;
+  left: 2px;
+  top: 10px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: var(--good-bg);
+  color: var(--good);
+  font-weight: 900;
+  font-size: 12px;
+  display: grid;
+  place-items: center;
+}
+.list.no li:before {
+  content: '✕';
+  background: var(--bad-bg);
+  color: var(--pink);
+}
+.val-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.val-table th, .val-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-size: 15.5px;
+}
+.val-table th { background: var(--lilac); color: var(--purple); font-weight: 800; }
+.val-table td.v { text-align: right; font-weight: 800; color: var(--indigo); white-space: nowrap; }
+.val-table tr.tot td { background: var(--gold-soft); font-weight: 800; font-size: 17.5px; border-bottom: 0; }
+
+/* FAQ Accordions */
+details {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin: 10px 0;
+  transition: border-color 0.15s;
+}
+details[open] { border-color: var(--purple); box-shadow: 0 6px 18px rgba(74, 13, 128, 0.06); }
+summary { cursor: pointer; font-weight: 700; color: var(--indigo); font-size: 16.5px; }
+details p { margin: 10px 0 0; color: #463E52; font-size: 15.5px; }
+
+/* Floating Live Activity Proof Toast */
+.live-toast {
+  position: fixed;
+  left: 18px;
+  bottom: 92px;
+  z-index: 45;
+  background: #fff;
+  border: 1px solid #D6C4EB;
+  border-left: 4px solid var(--purple);
+  border-radius: 14px;
+  padding: 11px 14px;
+  box-shadow: 0 10px 28px rgba(35, 19, 61, 0.16);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 340px;
+  font-size: 12.5px;
+  line-height: 1.38;
+  transition: opacity 0.35s, transform 0.35s;
+}
+.live-toast.hide { opacity: 0; transform: translateY(16px); pointer-events: none; }
+.lt-av {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--lilac);
+  color: var(--purple);
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.lt-close {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+/* Sticky Bottom Bar */
+.sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(22, 11, 40, 0.96);
+  color: #fff;
+  padding: 11px 18px;
+  z-index: 50;
+  border-top: 1px solid rgba(243, 201, 105, 0.35);
+  backdrop-filter: blur(10px);
+}
+.sticky-bar .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+.st-left strong { display: block; font-size: 15.5px; color: var(--gold-bright); }
+.st-left span { font-size: 12.5px; color: #E2D4F0; }
+.sticky-cta {
+  background: linear-gradient(135deg, #F3C969 0%, #CA8A04 100%);
+  color: var(--indigo-deep);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 11px 20px;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(243, 201, 105, 0.35);
+}
+
+footer { padding: 36px 0 44px; color: var(--muted); font-size: 13px; text-align: center; }
+
+@media (max-width: 760px) {
+  .tr-grid, .grid2, .grid3, .calc-cards { grid-template-columns: 1fr; }
+  .offer-pair-pills { grid-template-columns: 1fr; }
+  .tour-tabs { grid-template-columns: 1fr 1fr; }
+  .mod-card { grid-template-columns: 1fr; }
+  .top-nav a.nav-link { display: none; }
+  .st-left span { display: none; }
+  .live-toast { left: 12px; right: 12px; bottom: 82px; max-width: none; }
+}
+
+/* Added: real Miindtraa imagery and authentic Studio screenshots */
+.brand-mark-photo{width:36px;height:36px;object-fit:contain;border-radius:10px;background:#fff;flex-shrink:0}
+.hero-presenter{margin:0 auto 12px;display:flex;align-items:center;gap:12px;max-width:510px;justify-content:center;text-align:left}
+.hero-presenter img{width:68px;height:68px;object-fit:cover;object-position:center 28%;border-radius:50%;border:3px solid #fff;box-shadow:0 4px 14px rgba(35,19,61,.13)}
+.hero-presenter p{margin:0;color:#4b4057;font-size:13.5px;line-height:1.5}
+.hero-early-cta{margin:8px auto 14px}
+.iphm-inline{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px;margin:18px auto 0}
+.iphm-inline img{width:260px;max-width:80vw;height:auto}
+.iphm-inline span{color:var(--muted);font-size:11.5px;max-width:320px;text-align:left;line-height:1.45}
+.studio-screens{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0 14px}
+.studio-screen{background:#fff;border:1px solid #d8c6ec;border-radius:16px;padding:12px;color:var(--ink)}
+.studio-screen img{display:block;width:100%;height:340px;object-fit:cover;object-position:center top;border:1px solid #eee;border-radius:10px;background:#fbf8f2}
+.studio-screen figcaption{font-size:12px;line-height:1.55;margin-top:9px;color:var(--muted)}
+.founders-photo-row{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px;margin:22px 0 16px}
+.founders-photo-row figure{margin:0;background:white;border:1px solid #e4dcea;border-radius:14px;overflow:hidden}
+.founders-photo-row img{display:block;width:100%;height:260px;object-fit:cover;object-position:center 27%}
+.founders-photo-row figure:first-child img{object-position:center 23%}
+.founders-photo-row figcaption{padding:10px 12px;font-size:12.5px;font-weight:700;color:#3e275c;text-align:center}
+.iphm-notice{font-size:12px;opacity:.85;margin-top:10px}
+@media(max-width:700px){.founders-photo-row{grid-template-columns:1fr 1fr}.founders-photo-row figure:first-child{grid-column:1/-1}.founders-photo-row figure:first-child img{height:300px}.founders-photo-row img{height:220px}.studio-screens{grid-template-columns:1fr 1fr;gap:8px}.studio-screen{padding:7px}.studio-screen img{height:275px}.studio-screen figcaption{font-size:11px}.hero-presenter img{width:58px;height:58px}.iphm-inline span{text-align:center}}
+
+@media(max-width:560px){.sticky-bar .st-left span{display:none}.sticky-bar .st-left strong{font-size:13px;line-height:1.3;display:block}.sticky-bar{padding:9px 12px}.sticky-cta{font-size:14px;padding:10px 14px}}
+</style>
+
+
+<!-- TOP NAVIGATION BAR -->
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <img class="brand-mark-photo" src="https://miindtraa.github.io/sessiontosignature/join/assets/miindtraa_lotus.jpg" alt="Miindtraa lotus brand mark" width="36" height="36">
+      <div>miindtraa<small>From Sessions to Signature™</small></div>
+    </a>
+    <nav class="top-nav">
+      <a class="nav-link" href="#why-stall">Why Sessions Stall</a>
+      <a class="nav-link" href="#studio-demo">Try Layer Lens™</a>
+      <a class="nav-link" href="#math-sim">Income Math</a>
+      <a class="nav-link" href="#modules">5 Modules</a>
+      <a class="top-cta" href="https://academy.miindtraa.com/web/checkout/6aef34324ae89a9e3665e7fa" data-checkout>Unlock Kit · ₹499 →</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO SECTION WITH REAL-TIME PRACTICE TRANSFORMER -->
+  <section class="hero">
+    <div class="wrap hero-center">
+      <div class="pill-badge">
+        <span class="pill-dot"></span>
+        <span>For Healers, Therapists &amp; Coaches With Multiple Certifications</span>
+      </div>
+
+      <h1>From Sessions to Signature™:<br><span class="grad">Turn Loose ₹1,000 Sessions Into a ₹25,000+ Signature Program</span></h1>
+
+      <p class="lead">Your training is real. What most healers have never been shown is how a new client starts with them and why that client continues. In about 2 hours, build <b>one Paid First Session</b> that turns a stranger into a paying client, and <b>one 6 to 12 week Signature Program</b> that gives the deeper work the weeks it needs.</p>
+
+      <div class="hero-presenter" aria-label="Presented by Pankaj S. Nikam">
+        <img src="https://miindtraa.github.io/sessiontosignature/join/assets/pankaj_portrait.jpg" alt="Pankaj S. Nikam, creator of Sessions to Signature" width="68" height="68">
+        <p><b>Guided by Pankaj S. Nikam</b><br>Co-creator of NQH™ with Dr. Amaey A. Parekh · Miindtraa</p>
+      </div>
+      <a class="btn hero-early-cta" href="https://academy.miindtraa.com/web/checkout/6aef34324ae89a9e3665e7fa" data-checkout>
+        <span>Get Your 2-Offer Kit · ₹499 →</span>
+        <small>5 modules + Signature Studio + practice plan</small>
+      </a>
+
+      <!-- INTERACTIVE BEFORE -> AFTER PRACTICE TRANSFORMER -->
+      <div class="transformer">
+        <div class="tr-header">
+          <div class="tr-title">⚡ Tap your practice type to see your 2-Offer shift:</div>
+          <div class="rtabs" id="rotatorTabs">
+            <button type="button" class="rtab on" data-av="0">Reiki / EFT Healer</button>
+            <button type="button" class="rtab" data-av="1">Counselling Psychologist</button>
+            <button type="button" class="rtab" data-av="2">Theta / Akashic Practitioner</button>
+            <button type="button" class="rtab" data-av="3">Life / NLP Coach</button>
+          </div>
+        </div>
+
+        <div class="tr-grid" id="trGrid">
+          <div class="tr-box before">
+            <span class="tr-tag">❌ Before · Scattered Single Sessions</span>
+            <h3 id="avBeforeTitle" style="font-size:18px;color:#7F1D35">"I do Reiki, EFT, crystals &amp; aura cleansing..."</h3>
+            <p id="avBeforeDesc" style="font-size:14px;color:#581C2C;margin:6px 0 10px">Charges ₹800–₹1,500 per session (or gives free "quick calls"). Pours every tool into Hour 1. Client feels light for 3 days, then texts 3 weeks later: <i>"The night anxiety is back again."</i></p>
+            <div style="font-size:12.5px;font-weight:700;color:#9B2344;background:rgba(255,255,255,0.65);padding:7px 10px;border-radius:8px" id="avBeforeMath">
+              ⚠️ Needs 67 single sessions/month (~16/week) to hit ₹1,00,000
+            </div>
+          </div>
+
+          <div class="tr-box after">
+            <span class="tr-tag">✓ After · From Sessions to Signature™</span>
+            <h3 id="rotatorText" style="font-size:17.5px;color:#fff">"I help working mothers in their 30s whose mind keeps racing at night to sleep better and feel calmer at home."</h3>
+            <div class="offer-pair-pills">
+              <div class="op-pill">
+                <small>Offer 1 · Paid First Session</small>
+                <strong id="avOffer1">The Calm Night Session · ₹1,500 (75m)</strong>
+              </div>
+              <div class="op-pill">
+                <small>Offer 2 · Signature Program</small>
+                <strong id="avOffer2">12-Week Calm Within Method · ₹25,000</strong>
+              </div>
+            </div>
+            <div style="font-size:12.5px;color:#F3C969;margin-top:10px;font-weight:600" id="avBridge">
+              🔗 Bridge Line: "You've got a 10-min practice to fall asleep tonight. The next part is where the daytime worry started. That's what my 12-week Calm Within program is for."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a class="btn" href="https://academy.miindtraa.com/web/checkout/6aef34324ae89a9e3665e7fa" data-checkout>
+        <span>Get From Sessions to Signature™ for ₹499 →</span>
+        <small>Instant Access · 5 Modules + 21 Visual Diagrams + Signature Studio™ Web App</small>
+      </a>
+
+      <div class="hero-trust">
+        <span>✓ Built by <b>Pankaj S. Nikam &amp; Dr. Amaey A. Parekh</b> (Counselling Psychologists)</span>
+        <span>✓ <b>200+</b> Practitioners Mentored</span>
+        <span>✓ <b>IPHM</b> Accredited Training Provider</span>
+      </div>
+      <div class="iphm-inline">
+         <img src="https://miindtraa.github.io/sessiontosignature/join/assets/iphm_training_provider.png" alt="IPHM Accredited Training Provider mark" width="260" height="72" loading="lazy">
+         <span>Miindtraa training-provider accreditation. This ₹499 planning kit is not a practitioner certification.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFINITE ANIMATED MARQUEE RIBBON -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">◆ <b>Module 1:</b> Write Your One-Line Answer</span>
+      <span class="marquee-item">◆ <b>Module 2:</b> Design Your Paid First Session</span>
+      <span class="marquee-item">◆ <b>Module 3:</b> Run the Layer Lens™ Across Mind, Emotion &amp; Energy</span>
+      <span class="marquee-item">◆ <b>Station 5:</b> Generate Your Signature Method Card</span>
+      <span class="marquee-item">◆ <b>Module 4:</b> Practise Saying Your Price in ChatGPT</span>
+      <span class="marquee-item">◆ <b>Station 8:</b> Download Your White-Label Client One-Pager PDF</span>
+      <span class="marquee-item">◆ <b>Bonus:</b> Free 45-Min Practitioner Readiness Call Invite</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee-item">◆ <b>Module 1:</b> Write Your One-Line Answer</span>
+      <span class="marquee-item">◆ <b>Module 2:</b> Design Your Paid First Session</span>
+      <span class="marquee-item">◆ <b>Module 3:</b> Run the Layer Lens™ Across Mind, Emotion &amp; Energy</span>
+      <span class="marquee-item">◆ <b>Station 5:</b> Generate Your Signature Method Card</span>
+      <span class="marquee-item">◆ <b>Module 4:</b> Practise Saying Your Price in ChatGPT</span>
+      <span class="marquee-item">◆ <b>Station 8:</b> Download Your White-Label Client One-Pager PDF</span>
+      <span class="marquee-item">◆ <b>Bonus:</b> Free 45-Min Practitioner Readiness Call Invite</span>
+    </div>
+  </div>
+
+  <!-- SECTION: WHY HEALING PRACTICES STALL + WHATSAPP RELAPSE SIMULATION -->
+  <section id="why-stall">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">The Root Problem</span>
+        <h2>Why do clients feel great on Monday, and text you 3 weeks later with the exact same pattern?</h2>
+        <p style="color:var(--muted)">If you have invested ₹2 to ₹5 lakhs in healing or therapy certifications, your skill is real. Here is why single sessions keep you and your client going round in circles:</p>
+      </div>
+
+      <div class="grid2" style="align-items:center">
+        <!-- Animated WhatsApp Relapse Mockup -->
+        <div class="wa-phone">
+          <div class="wa-top">
+            <div class="wa-av">R</div>
+            <div>
+              <div>Riya (Client · Session 1)</div>
+              <small style="font-weight:400;opacity:.85">online · WhatsApp</small>
+            </div>
+          </div>
+          <div class="wa-body">
+            <span class="wa-tag">Monday · Right After Session 1 (₹1,000)</span>
+            <div class="wa-msg">
+              Thank you so much! 🙏 I felt so light and calm after today's healing. My chest finally feels open and I slept properly! ✨
+              <span class="wa-time">6:42 PM</span>
+            </div>
+            <div class="wa-msg me">
+              So happy to hear that Riya! Let me know whenever you feel like booking another session 🙏
+              <span class="wa-time">6:45 PM ✓✓</span>
+            </div>
+            <span class="wa-tag warn" style="margin-top:8px">3 Weeks Later · Thursday Night</span>
+            <div class="wa-msg">
+              Hi... sorry to message late. That same heaviness and overthinking loop started again after an argument at home 😔 Why does it keep coming back?
+              <span class="wa-time">11:18 PM</span>
+            </div>
+            <div class="wa-msg me" style="background:#FFF3CD;border:1px dashed #B88214">
+              <b>Your inner monologue:</b> "Do I charge her ₹1,000 again? Offer a discount? Which modality do I try this time?"
+            </div>
+          </div>
+        </div>
+
+        <!-- Diagnosis + Two Jobs Explanation -->
+        <div>
+          <div class="card bad" style="margin-bottom:14px">
+            <span class="kicker" style="color:var(--pink)">Gap #1 · No Clear Follow-Through Plan</span>
+            <h3>Calm after one hour ≠ pattern change</h3>
+            <p style="margin:0;font-size:15px;color:#4B2331">For recurring concerns, one session may not address everything a client hopes to work on. A clear longer-term plan helps you explain the sequence of your sessions and where your approach does and does not fit. The Layer Lens™ helps you review your planned mind, emotion and energy activities; it does not diagnose causes or predict outcomes.</p>
+          </div>
+
+          <div class="card gold" style="margin-bottom:14px">
+            <span class="kicker" style="color:#784F04">Gap #2 · One Session, Two Jobs</span>
+            <h3>You are asking one session to do two opposite jobs</h3>
+            <p style="margin:0;font-size:15px;color:#463E52"><b>Job 1</b> is turning a sceptical stranger into a paying client. <b>Job 2</b> is doing the deeper work over several weeks, which is also where steady income comes from. A loose ₹1,000 session is too short for Job 2, and a ₹30,000 package is too scary for a stranger on Day 1.</p>
+          </div>
+
+          <div class="card lilac">
+            <span class="kicker" style="color:var(--purple)">The Fix · From Sessions to Signature™</span>
+            <h3>Two connected offers. One clear job each.</h3>
+            <p style="margin:0;font-size:15px;color:#3B2A54"><b>Offer 1 (Your Paid First Session)</b> gives them one focused shift tonight and earns trust. <b>Offer 2 (Your 6, 9, or 12-Week Signature Program)</b> gives the deeper root pattern time to rewire across Mind, Emotion, and Energy.</p>
+          </div>
+        </div>
+      </div>
+
+      <img class="sketch" src="https://miindtraa.github.io/sessiontosignature/join/assets/diagram-1.webp" alt="Your program starts where the first session ends: First Session to The Bridge to Signature Program">
+    </div>
+  </section>
+
+  <!-- INTERACTIVE LAYER LENS SIMULATOR & SIGNATURE STUDIO TOUR -->
+  <section class="dark-sec" id="studio-demo">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker" style="color:var(--gold-bright)">Interactive Live Preview · Test It Right Now</span>
+        <h2>We did not just write you a PDF. We built you Signature Studio™.</h2>
+        <p style="color:#DDD0F0">Inside your ₹499 kit, you unlock our private 8-station web app. In Station 4, it runs the <b>Layer Lens™</b> on your program. <b>Tap any practitioner profile below to see the Layer Lens™ run live:</b></p>
+      </div>
+
+      <div class="sim-box">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px">
+          <div>
+            <span class="kicker" style="color:var(--purple)">Live Station 4 Simulator · The Layer Lens™</span>
+            <h3 id="simTitle" style="margin-top:2px">Ritu · Reiki &amp; EFT Practitioner (12-Week Program)</h3>
+          </div>
+          <span style="font-size:12.5px;background:var(--lilac);color:var(--purple);font-weight:800;padding:5px 12px;border-radius:999px" id="simOpenBadge">4 Open Weeks Detected</span>
+        </div>
+
+        <div class="sim-pills" id="simButtons">
+          <button type="button" class="sim-btn on" data-sim="0">1. Reiki + EFT Healer</button>
+          <button type="button" class="sim-btn" data-sim="1">2. Talk Therapist / Psychologist</button>
+          <button type="button" class="sim-btn" data-sim="2">3. Theta + Tarot Practitioner</button>
+          <button type="button" class="sim-btn" data-sim="3">4. Integrated 3-Layer Signature Plan ✓</button>
+        </div>
+
+        <div class="lrow">
+          <b style="color:#4A0D80">Mind</b>
+          <div class="cells m" id="barsM"></div>
+          <span id="cntM" style="font-weight:700;text-align:right">2 of 12 wks</span>
+        </div>
+        <div class="lrow">
+          <b style="color:#C0486A">Emotion</b>
+          <div class="cells e" id="barsE"></div>
+          <span id="cntE" style="font-weight:700;text-align:right">4 of 12 wks</span>
+        </div>
+        <div class="lrow">
+          <b style="color:#B88214">Energy</b>
+          <div class="cells n" id="barsN"></div>
+          <span id="cntN" style="font-weight:700;text-align:right">3 of 12 wks</span>
+        </div>
+
+        <div class="sim-verdict" id="simVerdict">
+          <b>What the Layer Lens™ noticed:</b> "Your plan is clear until Week 4, and then it thins out. 4 of 12 weeks are open ('see what comes up'). Your program mostly leaves out the <b>Mind layer</b> (thoughts, beliefs and the story they tell themselves). This is a prompt to review your plan, not a diagnosis or explanation of why a client’s concerns return."
+        </div>
+      </div>
+
+      
+
+      <!-- 4-TAB SIGNATURE STUDIO FEATURE SHOWCASE -->
+      <div class="tour-tabs" id="tourTabs">
+        <button type="button" class="ttab on" data-tour="0">✨ 1. One-Line &amp; IG Bio</button>
+        <button type="button" class="ttab" data-tour="1">🪪 2. Signature Method Card</button>
+        <button type="button" class="ttab" data-tour="2">🎙️ 3. AI Price Practice Drill</button>
+        <button type="button" class="ttab" data-tour="3">📄 4. Client One-Pager PDF</button>
+      </div>
+
+      <div class="tour-panel" id="tourPanel">
+        <h3 id="tourHead" style="color:var(--gold-bright)">Station 1 · Build Your One-Line Answer &amp; Instagram Bio</h3>
+        <p id="tourBody" style="color:#E9D8FD;margin:6px 0 0">As you type who you help, their problem, and the result they want, Station 1 builds your one-line answer live, and with one tap opens your free ChatGPT pre-loaded with your exact answers to give you 3 sharper versions under 25 words plus a ready-to-paste 150-character Instagram bio.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE SESSION MATH SLIDER SIMULATOR -->
+  <section class="alt" id="math-sim">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">Module 5 Preview · Interactive Calculator</span>
+        <h2>Test Your Numbers: The Single-Session Trap vs. Your 2-Offer Practice</h2>
+        <p style="color:var(--muted)">Drag the sliders below to see how many sessions you need each week with single sessions versus a Paid First Session + Signature Program:</p>
+      </div>
+
+      <div class="calc-wrap">
+        <div class="grid3">
+          <div class="slider-row">
+            <div class="slider-head"><span>Monthly Income Goal</span><span class="slider-val" id="valGoal">₹1,00,000</span></div>
+            <input type="range" id="rngGoal" min="50000" max="300000" step="25000" value="100000">
+            <small style="color:var(--muted);font-size:12px">Slide from ₹50,000 to ₹3,00,000/mo</small>
+          </div>
+          <div class="slider-row">
+            <div class="slider-head"><span>Current Single-Session Fee</span><span class="slider-val" id="valSingle">₹1,500</span></div>
+            <input type="range" id="rngSingle" min="500" max="3000" step="250" value="1500">
+            <small style="color:var(--muted);font-size:12px">Your current 1:1 session price</small>
+          </div>
+          <div class="slider-row">
+            <div class="slider-head"><span>Your New 12-Wk Program Price</span><span class="slider-val" id="valProg">₹25,000</span></div>
+            <input type="range" id="rngProg" min="15000" max="50000" step="5000" value="25000">
+            <small style="color:var(--muted);font-size:12px">8 sessions across 12 weeks</small>
+          </div>
+        </div>
+
+        <div class="calc-cards">
+          <div class="calc-card trap">
+            <span class="kicker" style="color:var(--pink)">❌ Option A · Single Sessions Only</span>
+            <strong class="big-num" style="color:#9B2344" id="outSingleMo">67 sessions / month</strong>
+            <p style="margin:4px 0 8px;font-weight:700;color:#7F1D35" id="outSingleWk">~16 sessions every single week (no week off)</p>
+            <p style="margin:0;font-size:13.5px;color:#581C2C">Constantly chasing new people, starting from zero on the 1st of every month, with no time for deeper root work.</p>
+          </div>
+
+          <div class="calc-card sig">
+            <span class="kicker" style="color:var(--good)">✓ Option B · Paid First Session + Program</span>
+            <strong class="big-num" style="color:var(--good)" id="outProgMo">4 program clients / month</strong>
+            <p style="margin:4px 0 8px;font-weight:700;color:#14532D" id="outProgWk">~10 sessions a week (including 12 paid first sessions)</p>
+            <p style="margin:0;font-size:13.5px;color:#166534" id="outTotalEarn">Illustrative monthly receipts: <b>₹1,18,000</b>, assuming 1 in 3 first-session clients continues. Actual results and workload vary.</p>
+          </div>
+        </div>
+      </div>
+
+      <img class="sketch" src="https://miindtraa.github.io/sessiontosignature/join/assets/diagram-2.webp" alt="The Session Trap comparison sketchnote diagram">
+    </div>
+  </section>
+
+  <!-- THE 5 MODULES + VISUAL SKETCHNOTE ROADMAP -->
+  <section id="modules">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">Inside From Sessions to Signature™</span>
+        <h2>5 Short Modules. 5 Clear Decisions. 21 Visual Playbook Diagrams.</h2>
+        <p style="color:var(--muted)">Every module takes 20 to 30 minutes, starts with a short video from Pankaj, and pairs directly with your Signature Studio web app:</p>
+      </div>
+
+      <img class="sketch" src="https://miindtraa.github.io/sessiontosignature/join/assets/diagram-3.webp" alt="Five decisions. One practice plan. Sketchnote overview">
+
+      <div style="margin-top:24px">
+        <div class="mod-card">
+          <div class="mod-badge">01</div>
+          <div>
+            <span class="kicker">Module 01 · Who You Help</span>
+            <h3>The One-Line Answer</h3>
+            <p style="color:#463E52;margin:6px 0">Empty your certificate shelf and run the 5-question <b>Person Check</b> on the people you have already helped. Write a one-sentence answer to <i>"So, what do you do?"</i> that never names a modality, so strangers immediately understand the result you deliver.</p>
+            <img class="sketch" src="https://miindtraa.github.io/sessiontosignature/join/assets/diagram-4.webp" alt="One person. One problem. One result. Ritu example diagram">
+            <div class="mod-pills">
+              <span class="mpill">📋 Tool: The 5-Yes Person Check</span>
+              <span class="mpill gold">⚡ Studio Station 1: 3 AI Line Variations + 150-Char IG Bio</span>
+              <span class="mpill">⏱ 20 Mins</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mod-card">
+          <div class="mod-badge">02</div>
+          <div>
+            <span class="kicker">Module 02 · What They Pay For First</span>
+            <h3>The First Session</h3>
+            <p style="color:#463E52;margin:6px 0">Stop giving away free 1-hour healing sessions. Pick the best shape for your paid first step (75-minute 1:1 session, small 2-hour paid workshop, or guided audio pack), run the 5-point <b>Door Test</b>, and run the <b>Overstuff Check</b> so clients get one real shift tonight while leaving the deeper root for your program.</p>
+            <div class="mod-pills">
+              <span class="mpill">📋 Tool: First Session Sheet &amp; Door Test</span>
+              <span class="mpill gold">⚡ Studio Station 2: Live Door Score + AI Overstuff Check</span>
+              <span class="mpill">⏱ 25 Mins</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mod-card">
+          <div class="mod-badge">03</div>
+          <div>
+            <span class="kicker">Module 03 · What They Continue Into</span>
+            <h3>The Signature Program, Layer Lens™ &amp; Named Method</h3>
+            <p style="color:#463E52;margin:6px 0">Choose your program length (6, 9, or 12 weeks) and map one line per week. Run the <b>Layer Lens™</b> across <b>Mind, Emotion, and Energy</b> to see where your weeks thin out, group your weeks into 3–5 stages, give your method a name that belongs to you, and set your program price and client cap.</p>
+            <img class="sketch" src="https://miindtraa.github.io/sessiontosignature/join/assets/diagram-5.webp" alt="Why patterns come back in 3 weeks: the Mind, Emotion and Energy triad">
+            <div class="mod-pills">
+              <span class="mpill">📋 Tool: 12-Week Map &amp; Layer Lens™</span>
+              <span class="mpill gold">⚡ Studio Stations 3–5: Visual Method Card + Program Sheet</span>
+              <span class="mpill">⏱ 30 Mins</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mod-card">
+          <div class="mod-badge">04</div>
+          <div>
+            <span class="kicker">Module 04 · How One Leads to the Other</span>
+            <h3>The Bridge &amp; Saying Your Price Without Discounting</h3>
+            <p style="color:#463E52;margin:6px 0">Write your 3-part <b>Next-Step Line</b> and master the 6-step end-of-session script for the last 10 minutes of every first session, including how to state your ₹25,000+ program fee, pause quietly without apologising, send the same-evening WhatsApp message, and re-invite past clients.</p>
+            <div class="mod-pills">
+              <span class="mpill">📋 Tool: End-of-Session + WhatsApp + Past-Client Scripts</span>
+              <span class="mpill gold">⚡ Studio Station 6: Interactive AI Client Price-Objection Roleplay</span>
+              <span class="mpill">⏱ 20 Mins</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mod-card">
+          <div class="mod-badge">05</div>
+          <div>
+            <span class="kicker">Module 05 · Does It Add Up?</span>
+            <h3>The Session Math &amp; Client One-Pager PDF</h3>
+            <p style="color:#463E52;margin:6px 0">Work backwards from your monthly goal to exact program clients, paid first sessions, client hours (including prep and weekly WhatsApp support), and weekly conversations, plus Check #4: whether your Paid First Sessions cover your Meta ad spend + 18% GST. Then download your client-ready <b>Program One-Pager PDF</b>.</p>
+            <div class="mod-pills">
+              <span class="mpill">📋 Tool: The Session Math Calculator (.xlsx)</span>
+              <span class="mpill gold">⚡ Studio Stations 7–8: White-Label A4 Program One-Pager PDF</span>
+              <span class="mpill">⏱ 20 Mins</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRACTITIONER CASE STUDIES & FOUNDER AUTHORITY -->
+  <section class="alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">From Practitioners We Have Mentored</span>
+        <h2>What happens when healers stop selling loose sessions and build a structured practice:</h2>
+      </div>
+
+      <div class="grid2">
+        <div class="proof-card">
+          <div>
+            <div class="rev-jump"><span>₹500 / session</span><span class="arr">→</span><span>Week-by-week structure</span><span class="arr">→</span><span style="color:var(--purple)">₹33,000 Client</span></div>
+            <h3>From ₹500 sessions to a ₹33,000 package client</h3>
+            <p style="color:#463E52;font-size:15px">Shamta had deep healing skills but charged ₹500 per session because she could not explain a longer journey. Once she structured her multi-week roadmap and practised her pricing, she went on to sign a <b>₹33,000 package client</b>.</p>
+          </div>
+          <small style="color:var(--muted);font-weight:700">Shamta · NQH™ Practitioner</small>
+        </div>
+
+        <div class="proof-card">
+          <div>
+            <div class="rev-jump"><span>No job, no clients</span><span class="arr">→</span><span>NQH™ training</span><span class="arr">→</span><span style="color:var(--purple)">Corporate coach</span></div>
+            <h3>From starting over to a method she can explain</h3>
+            <p style="color:#463E52;font-size:15px">Vaishali had no job, no clients and no system. Today she is an <b>NQH™ Master Practitioner</b> working as a corporate coach, with a clear structure for her client work.</p>
+          </div>
+          <small style="color:var(--muted);font-weight:700">Vaishali · Corporate Coach &amp; NQH™ Master Practitioner</small>
+        </div>
+
+        <div class="proof-card">
+          <div>
+            <div class="rev-jump"><span>Temporary Relief</span><span class="arr">→</span><span style="color:var(--purple)">Mind + Emotion + Energy Integration</span></div>
+            <h3>Long-term results for her therapy clients</h3>
+            <p style="color:#463E52;font-size:15px">Jeenal moved from feeling underconfident in sessions to giving her therapy clients long-term results, once she understood the missing link between mind, emotion and energy.</p>
+          </div>
+          <small style="color:var(--muted);font-weight:700">Jeenal Patel · Therapist &amp; NQH™ Practitioner</small>
+        </div>
+
+        <div class="proof-card">
+          <div>
+            <div class="rev-jump"><span>Talk Therapy Ceiling</span><span class="arr">→</span><span style="color:var(--purple)">Structured Clinical + Energetic Flow</span></div>
+            <h3>One system inside her therapy practice</h3>
+            <p style="color:#463E52;font-size:15px">Hardeep, a counselling psychologist, felt something was missing in the emotional and energy layers that talk therapy could not reach. She integrated NQH™ into her practice and describes how it changed the way she works with clients.</p>
+          </div>
+          <small style="color:var(--muted);font-weight:700">Hardeep Kaur · Counselling Psychologist</small>
+        </div>
+      </div>
+
+      <div class="founders-photo-row" aria-label="Meet the Miindtraa founders">
+        <figure><img src="https://miindtraa.github.io/sessiontosignature/join/assets/founders_together.jpg" alt="Dr. Amaey A. Parekh and Pankaj S. Nikam together at Miindtraa" width="850" height="843" loading="lazy"><figcaption>Co-creators of NQH™ · Miindtraa</figcaption></figure>
+        <figure><img src="https://miindtraa.github.io/sessiontosignature/join/assets/pankaj_portrait.jpg" alt="Pankaj S. Nikam" width="720" height="900" loading="lazy"><figcaption>Pankaj S. Nikam · Program guide</figcaption></figure>
+        <figure><img src="https://miindtraa.github.io/sessiontosignature/join/assets/amaey_portrait.webp" alt="Dr. Amaey A. Parekh" width="720" height="900" loading="lazy"><figcaption>Dr. Amaey A. Parekh · Co-founder</figcaption></figure>
+      </div>
+
+      <!-- Founders Authority Card -->
+      <div class="card dark" style="margin-top:24px;padding:28px">
+        <div class="grid2" style="align-items:center">
+          <div>
+            <span class="kicker" style="color:var(--gold-bright)">Meet Your Mentors · Miindtraa School of Healing &amp; Training</span>
+            <h2 style="font-size:26px;margin:6px 0 10px;color:#fff">Built by two Counselling Psychologists who lived the 35-modality struggle first.</h2>
+            <p style="color:#E2D4F0;font-size:15px"><b>Pankaj S. Nikam</b> and <b>Dr. Amaey A. Parekh</b>, both counselling psychologists and co-creators of NQH™, spent years collecting 35+ modalities between them and still felt scattered and underpaid. Then they spent 5 years building one system that holds it all together.</p>
+            <p style="color:#E2D4F0;font-size:15px;margin:0"><i>"For years, at the end of a session, I would say 'Arrey ruko, ek baar rate ke baare mein baat karte hain' and give a discount before the client even asked. From Sessions to Signature™ is the exact 2-offer foundation we now build first with every practitioner we mentor."</i> <b>Pankaj S. Nikam</b></p>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:center">
+            <div style="background:rgba(255,255,255,0.08);padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.14)">
+              <strong class="serif" style="font-size:28px;color:var(--gold-bright);display:block">5,000+</strong>
+              <span style="font-size:12.5px;color:#E2D4F0">Client sessions</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.14)">
+              <strong class="serif" style="font-size:28px;color:var(--gold-bright);display:block">200+</strong>
+              <span style="font-size:12.5px;color:#E2D4F0">Practitioners across India, UK, UAE, US &amp; Singapore</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.14)">
+              <strong class="serif" style="font-size:28px;color:var(--gold-bright);display:block">5.0 ★</strong>
+              <span style="font-size:12.5px;color:#E2D4F0">Google rating</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.14)">
+              <strong class="serif" style="font-size:28px;color:var(--gold-bright);display:block">273+</strong>
+              <span style="font-size:12.5px;color:#E2D4F0">Press features incl. ANI, Yahoo News &amp; The Tribune</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HONESTY FILTER: WHAT THIS IS vs WHAT THIS IS NOT -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">No Hype · Clear Filter</span>
+        <h2>Who From Sessions to Signature™ is for, and what it is not</h2>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>✓ This ₹499 kit IS for you if:</h3>
+          <ul class="list" style="margin-top:10px">
+            <li>You are an energy healer, therapist, counsellor, or coach who already knows how to help people, but struggles to package and price your work</li>
+            <li>You want a complete 2-hour interactive system (<b>Signature Studio™</b> + 5 visual module guides + 6 short Pankaj videos) you can finish this weekend</li>
+            <li>You want to walk away with your <b>One-Line Answer</b>, <b>Paid First Session</b>, <b>12-Week Map</b>, <b>Layer Lens™</b>, <b>Named Method Card</b>, and <b>Client One-Pager PDF</b></li>
+            <li>You want the option to book a free 45-minute <b>Practitioner Readiness Call</b> with Pankaj's team to review your Layer Lens™ and 120-day plan</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>✕ This kit is NOT:</h3>
+          <ul class="list no" style="margin-top:10px">
+            <li><b>Not a 3-hour live webinar</b> where you sit on Zoom waiting for a sales pitch</li>
+            <li><b>Not a healing certification.</b> It helps you review where your weekly plan has gaps, while full NQH™ certification happens inside our 120-day Accelerator</li>
+            <li><b>Not a 40-hour theory course</b> that sits unopened in your email</li>
+            <li><b>Not a "magic button"</b> that invents skills you do not have. It structures the real healing and coaching skills you already carry</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE STACK & CHECKOUT SECTION -->
+  <section class="alt" id="checkout">
+    <div class="wrap-sm">
+      <div class="sec-head">
+        <span class="kicker">Complete Kit Breakdown</span>
+        <h2>Everything you unlock today for ₹499</h2>
+        <p style="color:var(--muted)">One decision today replaces months of overthinking your niche, your session fee, and your program structure:</p>
+      </div>
+
+      <table class="val-table">
+        <thead>
+          <tr><th>Included Inside From Sessions to Signature™</th><th style="text-align:right">Standalone Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>1. Signature Studio™ Private Web App</b> (8 Interactive Stations + Live Layer Lens™ + PDF Generator)</td><td class="v">₹3,999</td></tr>
+          <tr><td><b>2. 5 Step-by-Step Visual Playbooks + 6 Lesson Videos by Pankaj</b> (With 21 Custom Sketchnote Diagrams)</td><td class="v">₹2,999</td></tr>
+          <tr><td><b>3. My Signature Practice Plan &amp; Client One-Pager Templates</b> (Editable Google Docs)</td><td class="v">₹1,999</td></tr>
+          <tr><td><b>4. The Session Math Calculator</b> (Google Sheet with Client Overlap &amp; Meta Ads Self-Liquidation Check)</td><td class="v">₹999</td></tr>
+          <tr><td><b>5. 7 Pre-Loaded AI Copy &amp; Price-Objection Roleplay Prompts</b> (Works with free ChatGPT, Claude &amp; Gemini)</td><td class="v">₹1,499</td></tr>
+          <tr><td><b>6. Practitioner WhatsApp Community + Free 45-Min Readiness Call Invitation</b></td><td class="v">₹499</td></tr>
+          <tr class="tot"><td>Total Kit Value</td><td class="v">₹11,994</td></tr>
+        </tbody>
+      </table>
+
+      <div class="card dark" style="text-align:center;padding:32px 24px;margin-top:22px;border:2px solid var(--gold-bright)">
+        <span class="kicker" style="color:var(--gold-bright)">Instant Access · One-Time Payment</span>
+        <h2 style="font-size:38px;margin:8px 0 8px;color:#fff">Today: ₹499</h2>
+        <p style="color:#E2D4F0;max-width:560px;margin:0 auto 18px;font-size:15.5px">Less than the price of a single undercharged session, for the 2-offer blueprint, Signature Studio™ web app, and client One-Pager PDF you will use all year.</p>
+        <a class="btn gold" href="https://academy.miindtraa.com/web/checkout/6aef34324ae89a9e3665e7fa" data-checkout>
+          <span>Unlock From Sessions to Signature™ · ₹499 →</span>
+          <small style="color:#FFFBEB">Immediate access to all 5 modules, Google Docs &amp; Signature Studio™</small>
+        </a>
+        <small style="color:#C4B5FD;display:block;margin-top:12px">🔒 100% Secure Checkout · UPI, GPay, PhonePe, Cards &amp; NetBanking</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section style="border-bottom:0">
+    <div class="wrap-sm">
+      <div class="sec-head">
+        <span class="kicker">Got Questions?</span>
+        <h2>Frequently Asked Questions</h2>
+      </div>
+
+      <details open>
+        <summary>Who is From Sessions to Signature™ built for?</summary>
+        <p>It is built specifically for energy healers (Reiki, ThetaHealing, Pranic, EFT, Tarot, Akashic, Crystal/Chakra healers), counselling psychologists, talk therapists, and certified life/NLP coaches who want to move from scattered single sessions into a clear Paid First Session + 6, 9, or 12-Week Signature Program.</p>
+      </details>
+      <details>
+        <summary>How long does it take to finish the kit?</summary>
+        <p>About 2 hours total. Each of the 5 modules takes 20 to 30 minutes. As you type into Signature Studio™, it builds your one-line answer, First Session Sheet, 12-Week Map, Layer Lens™, Signature Method Card, scripts, and Client One-Pager PDF automatically.</p>
+      </details>
+      <details>
+        <summary>Do I need a paid ChatGPT Plus subscription to use Signature Studio™?</summary>
+        <p>No. Signature Studio™ runs in any mobile or laptop browser and works with a free ChatGPT account (or free Claude / Gemini). Every prompt is pre-written and auto-copied with your answers inside.</p>
+      </details>
+      <details>
+        <summary>What if I help many kinds of people and cannot pick just one niche?</summary>
+        <p>Module 1 walks you through the 5-question Person Check to score every group you have helped. And if two groups still tie at 5 out of 5, kit members get a free 45-minute Practitioner Readiness Call with Pankaj's team where we help you lock that decision 1:1.</p>
+      </details>
+      <details>
+        <summary>How does this connect to the 120-Day NQH™ Healer Accelerator?</summary>
+        <p>From Sessions to Signature™ is the self-paced first draft of Phase 2 (Positioning) of our 120-day NQH™ Healer Accelerator. You keep and own everything you build in this ₹499 kit whether you ever join the Accelerator or not. If your Layer Lens™ in Module 3 reveals gaps in your weekly method and you want to build your certification, offer, and client pipeline live with Pankaj and Dr. Amaey, you can book your free Readiness Call right inside the Studio.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<!-- STICKY BOTTOM BAR -->
+<div class="sticky-bar">
+  <div class="wrap">
+    <div class="st-left">
+      <strong>Sessions to Signature™ Kit + Studio App</strong>
+      <span>5 Modules · 21 Visual Diagrams · Live Layer Lens™ · Client One-Pager PDF</span>
+    </div>
+    <a class="sticky-cta" href="https://academy.miindtraa.com/web/checkout/6aef34324ae89a9e3665e7fa" data-checkout>Get Instant Access · ₹499 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p><b>© 2026 Miindtraa School of Healing &amp; Training. All rights reserved.</b> NQH™ (Neurochakra Quantum Healing), From Sessions to Signature™, Signature Studio™ and the Layer Lens™ are trademarks of Miindtraa. Results vary with each practitioner's effort and implementation; no specific income or clinical outcome is guaranteed.</p>
+    <p><a href="https://miindtraa.com/" target="_blank" rel="noopener">miindtraa.com</a> · <a href="https://www.instagram.com/miindtraa/" target="_blank" rel="noopener">@miindtraa</a> · <a href="mailto:miindtraa2024@gmail.com">miindtraa2024@gmail.com</a></p>
+  </div>
+</footer>
+
+<script>
+/* © 2026 Miindtraa School of Healing & Training */
+(function(){
+  // 1. REQUIRED before launch: replace CHECKOUT_URL with the paid TagMango Service/Mango checkout URL. Do not use the post-purchase Readiness Call URL as a checkout link.
+  var CHECKOUT_URL = 'https://academy.miindtraa.com/web/checkout/6aef34324ae89a9e3665e7fa';
+  if(CHECKOUT_URL && CHECKOUT_URL !== '#checkout'){
+    var cBtns = document.querySelectorAll('[data-checkout]');
+    for(var c=0;c<cBtns.length;c++) cBtns[c].href = CHECKOUT_URL;
+  }
+
+  // 2. Hero Interactive Avatar Before -> After Transformer
+  var AVATARS = [
+    {
+      beforeTitle: '"I do Reiki, EFT, crystals & aura cleansing..."',
+      beforeDesc: 'Charges ₹800–₹1,500 per session (or gives free "quick calls"). Pours every tool into Hour 1. Client feels light for 3 days, then texts 3 weeks later: "The night anxiety is back again."',
+      beforeMath: '⚠️ Needs 67 single sessions/month (~16/week) to hit ₹1,00,000',
+      afterLine: '"I help working mothers in their 30s whose mind keeps racing at night to sleep better and feel calmer at home."',
+      offer1: 'The Calm Night Session · ₹1,500 (75m)',
+      offer2: '12-Week Calm Within Method · ₹25,000',
+      bridge: '🔗 Bridge Line: "You\’ve got a 10-min practice to fall asleep tonight. The next part is where the daytime worry started. That\’s what my 12-week Calm Within program is for."'
+    },
+    {
+      beforeTitle: '"I am a Counselling Psychologist offering 1:1 therapy sessions..."',
+      beforeDesc: 'Charges ₹1,200–₹1,800 per session. Clients talk through their story for 2 to 3 sessions, gain insight, feel heard, and stop booking before the somatic or energetic loop shifts.',
+      beforeMath: '⚠️ Needs 56–83 single sessions/month to hit ₹1,00,000',
+      afterLine: '"I help high-functioning professionals who replay relationship conflict in their head to break anxious attachment loops and feel secure."',
+      offer1: 'Relationship Pattern Diagnosis · ₹1,800 (75m)',
+      offer2: '9-Week Secure Bond Method · ₹32,000',
+      bridge: '🔗 Bridge Line: "Today we mapped your trigger loop and calming anchor. The next part is rewiring the attachment story underneath it. That\’s what my 9-week program is for."'
+    },
+    {
+      beforeTitle: '"I do ThetaHealing, Akashic Records, Tarot & Inner Child work..."',
+      beforeDesc: 'Attracts curious one-off seekers who want a quick reading or belief pull for ₹999, bargain on fees, and jump from healer to healer whenever an old money or relationship block resurfaces.',
+      beforeMath: '⚠️ Needs 100 sessions at ₹999/month to hit ₹1,00,000',
+      afterLine: '"I help women going through a painful divorce or breakup who keep replaying the past to feel steady enough to rebuild their future."',
+      offer1: 'Emotional Cord-Release Session · ₹1,500 (75m)',
+      offer2: '12-Week Steady Ground Method · ₹28,000',
+      bridge: '🔗 Bridge Line: "You\’ve released the immediate heaviness from this week. The next part is clearing the deeper guilt and rebuilding self-trust. That\’s what my 12-week program is for."'
+    },
+    {
+      beforeTitle: '"I am a Certified Life & NLP Coach helping people reach their potential..."',
+      beforeDesc: 'Gives free 45-minute discovery sessions where clients take the free clarity, say "Thank you, let me think about it," and vanish because "unlocking potential" sounds vague.',
+      beforeMath: '⚠️ Hours wasted on unpaid clarity calls + inconsistent monthly income',
+      afterLine: '"I help mid-career managers who go blank in high-stakes meetings to speak with calm authority and step into leadership roles."',
+      offer1: 'The Confident Voice Audit · ₹1,999 (75m)',
+      offer2: '12-Week Calm Authority Method · ₹40,000',
+      bridge: '🔗 Bridge Line: "You now have your 3-step pre-meeting reset. The next part is calming the fear underneath it. That\’s what my 12-week program is for."'
+    }
+  ];
+
+  var avTabs = document.querySelectorAll('[data-av]');
+  function setAvatar(idx){
+    var d = AVATARS[idx] || AVATARS[0];
+    document.getElementById('avBeforeTitle').textContent = d.beforeTitle;
+    document.getElementById('avBeforeDesc').textContent = d.beforeDesc;
+    document.getElementById('avBeforeMath').textContent = d.beforeMath;
+    document.getElementById('rotatorText').textContent = d.afterLine;
+    document.getElementById('avOffer1').textContent = d.offer1;
+    document.getElementById('avOffer2').textContent = d.offer2;
+    document.getElementById('avBridge').textContent = d.bridge;
+    for(var i=0;i<avTabs.length;i++) avTabs[i].classList.toggle('on', i===idx);
+  }
+  for(var a=0;a<avTabs.length;a++){
+    avTabs[a].addEventListener('click', function(){
+      setAvatar(parseInt(this.getAttribute('data-av'), 10) || 0);
+    });
+  }
+
+  // 3. Interactive Layer Lens Simulator
+  var SIMS = [
+    {
+      title: 'Ritu · Reiki & EFT Practitioner (12-Week Program)',
+      badge: '4 Open Weeks Detected',
+      m: [0,0,0,0,0,0,0,0,0,1,0,1],
+      e: [0,1,1,0,0,1,0,0,0,1,0,0],
+      n: [1,0,0,1,0,0,1,0,0,0,0,0],
+      verdict: '<b>What the Layer Lens™ noticed:</b> "Your plan is clear until Week 4, and then it thins out. 4 of 12 weeks are open (’see what comes up’). Your program mostly leaves out the <b>Mind layer</b> (2 of 12 weeks). This is a prompt to review your plan, not a diagnosis or explanation of why a client’s concerns return."'
+    },
+    {
+      title: 'Ananya · Talk Therapist & Counsellor (12-Week Program)',
+      badge: 'Emotion & Energy Gaps Detected',
+      m: [1,1,1,1,0,1,1,0,1,1,0,1],
+      e: [0,1,0,0,0,1,0,0,0,0,0,0],
+      n: [0,0,0,0,0,0,0,0,0,0,0,0],
+      verdict: '<b>What the Layer Lens™ noticed:</b> "Most of your work sits in the <b>Mind layer</b> (9 of 12 weeks), while the <b>Energy & nervous system layer</b> is 0 of 12 weeks. This chart reflects how the sample activities were tagged. It does not assess the quality of therapy or whether energy work is needed."'
+    },
+    {
+      title: 'Kabir · ThetaHealing & Tarot Practitioner (12-Week Program)',
+      badge: '5 Open Weeks After Week 4',
+      m: [1,1,1,0,0,0,1,0,0,0,0,1],
+      e: [0,1,0,1,0,0,0,0,0,1,0,0],
+      n: [1,0,0,1,0,0,0,0,0,0,0,0],
+      verdict: '<b>What the Layer Lens™ noticed:</b> "Your plan is clear until Week 4, and then 5 weeks are open. When a client asks what happens in Months 2 and 3, it is hard to explain, and that is where the price hesitation and discounting start."'
+    },
+    {
+      title: 'Integrated 3-Layer Signature Program (Built With NQH™ Structure)',
+      badge: '✓ 0 Open Weeks · Full 3-Layer Coverage',
+      m: [1,0,1,1,1,0,1,1,1,1,1,1],
+      e: [1,1,1,0,1,1,1,1,0,1,1,1],
+      n: [1,1,0,1,1,1,0,1,1,1,1,1],
+      verdict: '<b>What the Layer Lens™ noticed:</b> "Each week in this illustrative plan has a stated purpose across the three planning layers. Before selling a program, check that it fits your competencies, clients, and ethical scope. Coverage bars do not establish clinical effectiveness."'
+    }
+  ];
+
+  function renderBars(elId, arr){
+    var el = document.getElementById(elId);
+    if(!el) return;
+    var s = '';
+    for(var i=0;i<12;i++) s += '<i class="'+(arr[i]?'f':'')+'"></i>';
+    el.innerHTML = s;
+  }
+  function sumArr(arr){ var c=0; for(var i=0;i<arr.length;i++) if(arr[i]) c++; return c; }
+
+  var simBtns = document.querySelectorAll('[data-sim]');
+  function setSim(idx){
+    var s = SIMS[idx] || SIMS[0];
+    document.getElementById('simTitle').textContent = s.title;
+    document.getElementById('simOpenBadge').textContent = s.badge;
+    renderBars('barsM', s.m);
+    renderBars('barsE', s.e);
+    renderBars('barsN', s.n);
+    document.getElementById('cntM').textContent = sumArr(s.m) + ' of 12 wks';
+    document.getElementById('cntE').textContent = sumArr(s.e) + ' of 12 wks';
+    document.getElementById('cntN').textContent = sumArr(s.n) + ' of 12 wks';
+    document.getElementById('simVerdict').innerHTML = s.verdict;
+    for(var i=0;i<simBtns.length;i++) simBtns[i].classList.toggle('on', i===idx);
+  }
+  for(var sb=0;sb<simBtns.length;sb++){
+    simBtns[sb].addEventListener('click', function(){
+      setSim(parseInt(this.getAttribute('data-sim'), 10) || 0);
+    });
+  }
+  setSim(0);
+
+  // 4. Studio 4-Tab Tour
+  var TOURS = [
+    {
+      head: 'Station 1 · Build Your One-Line Answer & Instagram Bio',
+      body: 'As you type who you help, their problem, and the result they want, Station 1 builds your one-line answer live, and with one tap opens your free ChatGPT pre-loaded with your exact answers to give you 3 sharper versions under 25 words plus a ready-to-paste 150-character Instagram bio.'
+    },
+    {
+      head: 'Station 5 · Design Your Visual Signature Method Card',
+      body: 'Group your 6, 9, or 12 weeks into 3 to 5 clear stages (like Ritu\’s "1. Settle → 2. Understand → 3. Release → 4. Rebuild → 5. Carry Forward"). Station 5 renders a royal-purple & gold Signature Method Card live on your screen and embeds it into your Client One-Pager.'
+    },
+    {
+      head: 'Station 6 · Practise Saying Your Price With an AI Client',
+      body: 'Reading a script silently is easy; saying "₹25,000" out loud to a client is where most healers flinch. Station 6 launches an interactive roleplay where AI plays your client at the end of Session 1, asks your price, says "Let me think about it," and gives you honest feedback on whether you sounded calm or apologetic.'
+    },
+    {
+      head: 'Station 8 · Download Your White-Label Client One-Pager PDF',
+      body: 'Station 8 pulls together your Method Name, Program Name, "This program is for you if..." signs, stage-by-stage table, inclusions, boundaries, and first-session invite into a clean A4 PDF carrying only your name and title, ready to send on WhatsApp the same evening.'
+    }
+  ];
+  var tTabs = document.querySelectorAll('[data-tour]');
+  for(var tt=0;tt<tTabs.length;tt++){
+    tTabs[tt].addEventListener('click', function(){
+      var idx = parseInt(this.getAttribute('data-tour'), 10) || 0;
+      var t = TOURS[idx] || TOURS[0];
+      document.getElementById('tourHead').textContent = t.head;
+      document.getElementById('tourBody').textContent = t.body;
+      for(var j=0;j<tTabs.length;j++) tTabs[j].classList.toggle('on', j===idx);
+    });
+  }
+
+  // 5. Interactive Session Math Calculator
+  var rngGoal = document.getElementById('rngGoal');
+  var rngSingle = document.getElementById('rngSingle');
+  var rngProg = document.getElementById('rngProg');
+  function fmtRs(n){ return '₹' + Math.round(n).toLocaleString('en-IN'); }
+  function updateCalc(){
+    var goal = parseInt(rngGoal.value, 10) || 100000;
+    var single = parseInt(rngSingle.value, 10) || 1500;
+    var prog = parseInt(rngProg.value, 10) || 25000;
+    document.getElementById('valGoal').textContent = fmtRs(goal);
+    document.getElementById('valSingle').textContent = fmtRs(single);
+    document.getElementById('valProg').textContent = fmtRs(prog);
+
+    var sMo = Math.ceil(goal / single);
+    var sWk = Math.round(sMo / 4.33);
+    var pClients = Math.ceil(goal / prog);
+    var firstSess = pClients * 3; // 1 in 3 continue
+    var pWk = Math.round((pClients * 8 + firstSess) / 4.33);
+    var totRev = pClients * prog + firstSess * single;
+
+    document.getElementById('outSingleMo').textContent = sMo + ' sessions / month';
+    document.getElementById('outSingleWk').textContent = '~' + sWk + ' sessions every single week (no week off)';
+    document.getElementById('outProgMo').textContent = pClients + ' program clients / month';
+    document.getElementById('outProgWk').textContent = '~' + pWk + ' sessions a week (including ' + firstSess + ' paid first sessions)';
+    document.getElementById('outTotalEarn').innerHTML = 'Illustrative monthly receipts (assuming 1 in 3 first-session clients continues): <b>' + fmtRs(totRev) + '</b>. Results and workload vary.';
+  }
+  if(rngGoal && rngSingle && rngProg){
+    rngGoal.addEventListener('input', updateCalc);
+    rngSingle.addEventListener('input', updateCalc);
+    rngProg.addEventListener('input', updateCalc);
+    updateCalc();
+  }
+
+})();
+</script>
