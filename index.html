@@ -125,12 +125,15 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
 </style>
 </head>
 <body>
-<div id="gate" class="gate" style="display:none">
+<div id="gate" class="gate">
   <div class="kicker">Sessions to Signature</div>
   <h1>Signature Studio</h1>
   <p class="lead">Enter the access code from your kit (Start Here lesson).</p>
-  <label class="f"><input type="password" id="code" placeholder="Access code" autocomplete="off"></label>
-  <button class="btn" id="codeBtn">Open my studio</button>
+  <form id="gateForm" onsubmit="return window.__gateGo()" autocomplete="off">
+  <label class="f"><input type="text" id="code" placeholder="Access code" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go"></label>
+  <button class="btn" id="codeBtn" type="submit">Open my studio</button>
+  </form>
+  <p class="note" id="inapp" style="display:none;margin-top:12px">Tip: you seem to be inside another app's browser. If the Studio does not open, tap the menu and choose "Open in Chrome" or "Open in Safari".</p>
   <p class="note" id="codeMsg" style="margin-top:10px"></p>
   <p class="note" style="margin-top:30px">© 2026 Miindtraa School of Healing &amp; Training. Licensed for the personal use of kit buyers only.</p>
 </div>
@@ -151,6 +154,29 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
 </div>
 <div id="toast" role="status"></div>
 <script>
+/* © 2026 Miindtraa School of Healing & Training. Gate (kept simple so it works on every phone browser). */
+(function(){
+  window.__ACCESS='16763acd';
+  function norm(s){return String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+  function h(s){s=norm(s);var x=2166136261;for(var i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}var r=(x>>>0).toString(16);while(r.length<8)r='0'+r;return r}
+  window.__hash=h;
+  function msg(t){var m=document.getElementById('codeMsg');if(m)m.textContent=t}
+  window.addEventListener('error',function(e){window.__lastErr=(e&&e.message)||'error'});
+  window.__gateGo=function(){
+    var v=document.getElementById('code').value;
+    if(h(v)!==window.__ACCESS){msg('That code does not match. Check the Start Here lesson in your course, or write to miindtraa2024@gmail.com.');return false}
+    try{localStorage.setItem('miindtraa-signature-studio-v2-ok',window.__ACCESS)}catch(e){}
+    if(typeof window.__openApp==='function'){
+      try{window.__openApp()}catch(e){msg('The Studio could not start here ('+e.message+'). Please open this link in Chrome or Safari, or write to miindtraa2024@gmail.com.')}
+    }else{
+      msg('This browser could not load the Studio'+(window.__lastErr?' ('+window.__lastErr+')':'')+'. Please open this link in Chrome (Android) or Safari (iPhone), or write to miindtraa2024@gmail.com.');
+    }
+    return false;
+  };
+  if(/FBAN|FBAV|Instagram|WhatsApp|; wv\)|Line\//i.test(navigator.userAgent||'')){var n=document.getElementById('inapp');if(n)n.style.display='block'}
+})();
+</script>
+<script>
 'use strict';
 /* © 2026 Miindtraa School of Healing & Training. All rights reserved. Licensed for personal use by Sessions to Signature buyers. */
 const ACCESS_HASH='16763acd'; // hash of the kit access code (see team notes). To change it, run studioHash('NEWCODE') in the browser console and paste the result here.
@@ -158,7 +184,7 @@ const CALL='https://nqhhealeracceleratorpage.miindtraa.com';
 const WA='https://chat.whatsapp.com/KzgfVh2dDQY4vfyuAl3iRp';
 const KEY='miindtraa-signature-studio-v2';
 const $=s=>document.querySelector(s);
-function studioHash(s){s=String(s).trim().toUpperCase();let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,'0')}
+function studioHash(s){s=String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,'0')}
 window.studioHash=studioHash;
 
 const blankWeek=()=>({t:'',m:false,e:false,n:false,x:false});
@@ -178,7 +204,7 @@ function merge(o){const r=JSON.parse(JSON.stringify(D));if(!o||typeof o!=='objec
  if(!Array.isArray(r.stages))r.stages=D.stages;while(r.stages.length<5)r.stages.push({n:'',w:'',c:''});r.stages=r.stages.slice(0,5);
  if(!Array.isArray(r.door))r.door=D.door;r.stage=Math.min(8,Math.max(0,parseInt(r.stage)||0));return r}
 function save(){try{localStorage.setItem(KEY,JSON.stringify({v:1,d}));$('#saved').textContent='Saved on this device'}catch(e){$('#saved').textContent='Not saved: use Save a backup'}}
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=k=>Math.max(0,Number(d[k])||0);
 const rs=x=>'₹'+Math.round(x).toLocaleString('en-IN');
 function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(window._t);window._t=setTimeout(()=>e.style.display='none',3500)}
@@ -425,10 +451,8 @@ const EX={name:'Ritu (example)',title:'Reiki and EFT practitioner',contact:'+91 
 
 /* ---------- start ---------- */
 function openApp(){$('#gate').style.display='none';$('#app').style.display='block';render()}
-function gate(){let ok=false;try{ok=localStorage.getItem(KEY+'-ok')===ACCESS_HASH}catch(e){}
- if(ok)return openApp();$('#gate').style.display='block';
- const go=()=>{if(studioHash($('#code').value)===ACCESS_HASH){try{localStorage.setItem(KEY+'-ok',ACCESS_HASH)}catch(e){}openApp()}else $('#codeMsg').textContent='That code does not match. Check the Start Here lesson, or write to miindtraa2024@gmail.com.'};
- $('#codeBtn').onclick=go;$('#code').onkeydown=e=>{if(e.key==='Enter')go()}}
+function gate(){window.__openApp=openApp;let ok=false;try{ok=localStorage.getItem(KEY+'-ok')===ACCESS_HASH}catch(e){}
+ if(ok)openApp()}
 $('#bk').onclick=()=>download('Signature Studio backup.json',JSON.stringify({v:1,d},null,1),'application/json');
 $('#rs').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const x=JSON.parse(await f.text());if(x.v!==1)throw 0;if(!confirm('Replace what is on this device with this backup?'))return;d=merge(x.d);render();toast('Backup restored.')}catch(_){toast('That file is not a Signature Studio backup.')}e.target.value=''};
 $('#ex').onclick=()=>{if(confirm('Load Ritu\'s example? This replaces what is on this device. Save a backup first if you have started.')){d=merge({...JSON.parse(JSON.stringify(D)),...EX,stage:4});render();toast('Ritu\'s example loaded. It is made up, for learning.')}};
