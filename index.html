@@ -104,6 +104,10 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
 .foot{max-width:820px;margin:0 auto;padding:18px 16px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
 .navbtm{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
 #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--indigo);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;display:none;z-index:50;max-width:92%}
+#modalBg{position:fixed;inset:0;background:rgba(38,33,48,.55);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
+#modalBox{background:#fff;border:1px solid var(--line);border-radius:16px;max-width:420px;width:100%;padding:20px;box-shadow:0 12px 32px rgba(38,33,48,.22)}
+#modalBox h3{margin:0 0 8px;font-size:19px}
+#modalBox p{margin:0 0 16px;font-size:15px;color:var(--muted)}
 /* one-pager */
 .op{background:#fff;border:1px solid var(--line);border-radius:12px;padding:30px 28px;color:#262130}
 .op .opk{font-size:11px;letter-spacing:1.6px;font-weight:800;color:var(--gold);text-transform:uppercase}
@@ -120,7 +124,7 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
 .gate{max-width:440px;margin:60px auto;padding:0 16px}
 @media print{
   body{background:#fff}
-  .top,.nav,.foot,#toast,.noprint,main>*:not(#printArea){display:none!important}
+  .top,.nav,.foot,#toast,#modalBg,.noprint,main>*:not(#printArea){display:none!important}
   main{padding:0;max-width:none}
   #printArea{display:block!important}
   .op{border:0;padding:0;font-size:12.5px;line-height:1.45}
@@ -147,7 +151,7 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
   <div class="top">
     <div class="bar">
       <div class="brand">miindtraa<small>SIGNATURE STUDIO</small></div>
-      <div style="display:flex;align-items:center;gap:10px"><span class="savedot" id="saved">Saved on this device</span><a class="callpill" id="callpill" href="https://miindtraa.github.io/s2s-studio-k7p4/call.html?from=studio-top" target="_blank" rel="noopener">Book a call with Pankaj</a></div>
+      <div style="display:flex;align-items:center;gap:10px"><span class="savedot" id="saved">Saved on this device</span><a class="callpill" id="callpill" href="https://miindtraa.github.io/sessiontosignature/call.html?from=studio-top" target="_blank" rel="noopener">Book a call with Pankaj</a></div>
     </div>
     <nav class="nav" id="nav" aria-label="Stations"></nav>
   </div>
@@ -159,6 +163,16 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
   </div>
 </div>
 <div id="toast" role="status"></div>
+<div id="modalBg" class="noprint" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div id="modalBox">
+    <h3 id="modalTitle">Please confirm</h3>
+    <p id="modalMsg"></p>
+    <div class="btns" style="justify-content:flex-end;margin-top:0">
+      <button class="btn ghost small" id="modalNo" type="button">Cancel</button>
+      <button class="btn small" id="modalYes" type="button">Yes, continue</button>
+    </div>
+  </div>
+</div>
 <script>
 /* © 2026 Miindtraa School of Healing & Training. Gate (kept simple so it works on every phone browser). */
 (function(){
@@ -186,7 +200,7 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
 'use strict';
 /* © 2026 Miindtraa School of Healing & Training. All rights reserved. Licensed for personal use by Sessions to Signature buyers. */
 const ACCESS_HASH='16763acd'; // hash of the kit access code (see team notes). To change it, run studioHash('NEWCODE') in the browser console and paste the result here.
-const CALL='https://miindtraa.github.io/s2s-studio-k7p4/call.html?from=studio';
+const CALL='https://miindtraa.github.io/sessiontosignature/call.html?from=studio';
 const WA='https://chat.whatsapp.com/KzgfVh2dDQY4vfyuAl3iRp';
 const KEY='miindtraa-signature-studio-v2';
 const $=s=>document.querySelector(s);
@@ -201,7 +215,7 @@ const D={name:'',title:'',contact:'',trainings:'',helped:'',who:'',problem:'',re
  stages:[{n:'',w:'',c:''},{n:'',w:'',c:''},{n:'',w:'',c:''},{n:'',w:'',c:''},{n:'',w:'',c:''}],
  method:'',pname:'',pchange:'',pincl:'',pnot:'',plimits:'',pmax:6,pprice:25000,
  after:'',still:'',takes:'',nextline:'',
- goal:100000,hours:18,single:1500,smin:75,support:15,fmin:90,r1:3,r2:3,
+ goal:100000,hours:18,single:1500,smin:75,support:15,fmin:90,r1:3,r2:3,adCost:0,
  signs:'',changes:'',stage:0};
 let d=JSON.parse(JSON.stringify(D));
 try{const x=JSON.parse(localStorage.getItem(KEY)||'null');if(x&&x.v===1)d=merge(x.d)}catch(e){}
@@ -217,7 +231,7 @@ function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';cl
 
 /* ---------- field helpers ---------- */
 function F(k,label,help='',type='text',ph=''){const v=esc(d[k]);const inp=type==='area'?`<textarea data-k="${k}" placeholder="${esc(ph)}">${v}</textarea>`:`<input type="${type==='num'?'number':'text'}" ${type==='num'?'inputmode="numeric" min="0"':''} data-k="${k}" value="${v}" placeholder="${esc(ph)}">`;return `<label class="f"><span>${label}</span>${inp}${help?`<small>${help}</small>`:''}</label>`}
-function AI(title,promptFn,what){return `<div class="ai"><div class="kicker">Ask AI to help</div><p style="margin:6px 0 4px"><b>${title}</b></p><p class="note">${what}</p><div class="btns"><button class="btn small" data-ai="${promptFn}" data-to="gpt">Open in ChatGPT</button><button class="btn ghost small" data-ai="${promptFn}" data-to="copy">Copy for Claude or Gemini</button></div><details><summary>See the prompt</summary><pre id="pv-${promptFn}"></pre></details><p class="note" style="margin-top:8px">ChatGPT opens with your prompt ready. Press send, then copy the answer you like back into the boxes here. Keep client names out of AI.</p></div>`}
+function AI(title,promptFn,what){return `<div class="ai"><div class="kicker">Ask AI to help</div><p style="margin:6px 0 4px"><b>${title}</b></p><p class="note">${what}</p><div class="btns"><button class="btn small" data-ai="${promptFn}" data-to="gpt">Open in ChatGPT</button><button class="btn ghost small" data-ai="${promptFn}" data-to="copy">Copy for Claude or Gemini</button></div><details><summary>See the prompt</summary><pre id="pv-${promptFn}"></pre></details><p class="note" style="margin-top:8px">ChatGPT opens with your prompt ready (we also copy it for you, so if the ChatGPT phone app opens blank, long-press the message box and tap Paste). Press send, then copy the answer you like back into the boxes here. Keep client names out of AI.</p></div>`}
 function pk(id,text,inside){return `<div class="pk noprint"><div class="pkh"><span class="av">P</span><b>A note from Pankaj</b></div><p style="margin:0 0 6px">${text}</p>${inside?`<div class="in"><b>Inside the NQH™ Healer Accelerator:</b> ${inside}</div>`:''}<a class="btn small gold" href="${CALL}-${id}" target="_blank" rel="noopener">Book my free Readiness Call →</a></div>`}
 function nextPrev(){const i=d.stage;return `<div class="navbtm noprint">${i>0?`<button class="btn ghost" data-go="${i-1}">← Back</button>`:'<span></span>'}${i<8?`<button class="btn" data-go="${i+1}">Next: ${STATIONS[i+1].short} →</button>`:''}</div>`}
 const RULES='Rules: use only the facts I give you. Do not invent qualifications, results, testimonials, techniques or medical claims. Plain, warm English that my clients would use. No jargon, no em dashes.';
@@ -243,7 +257,7 @@ ${F('name','Your name or practice name')}
 ${F('title','Your professional title','Only titles and qualifications you actually hold.')}
 ${F('contact','How clients reach you','WhatsApp number, email or Instagram handle.')}
 ${F('trainings','Your trainings and modalities','','area','For example: Reiki Level 2, EFT practitioner, counselling diploma')}
-${pk('welcome','You can build all of this on your own, and many healers do. If you would rather build it with me, book a free Practitioner Readiness Call now. Bring whatever you have, even an empty plan.','your program, your price and your method are built live with me and Amaey over 120 days, with 1:1 calls along the way.')}
+${pk('welcome','You can build all of this on your own, and many healers do. If you would rather build it with me, book a free Practitioner Readiness Call now. Bring whatever you have, even an empty plan.','your program, your price and your method are built live with me and Dr. Amaey Parekh over 120 days, with 1:1 calls along the way.')}
 <div class="card gold"><b>Want to see a finished example first?</b><p class="note" style="margin:6px 0 0">Tap "Load Ritu's example" at the very bottom of the page. Save a backup of your own work first.</p></div>
 <p class="note">Join the kit community on WhatsApp: <a href="${WA}" target="_blank" rel="noopener">open the group</a></p>${nextPrev()}`}
 
@@ -322,7 +336,7 @@ return `<div class="kicker">Station 4 · Module 3</div><h1>Your Layer Lens™</h
 <h2>Why this matters</h2><p>A person holds a pattern in their mind, their emotions and their energy at the same time. Work on one, and the other two can pull it back. This is why so many clients feel light after a session and come back three weeks later with the same thing.</p>
 <p>It matters for your price too. A client says yes to a 12-week program when they can see a reason behind every week. Open weeks are hard to explain, and harder to charge for.</p>
 ${!L.gaps?pk('s4','Your Lens looks strong. On a Readiness Call we can look at how you would explain it to a client, and what a 12-week program at a premium price would need from you.','you take a program like this, certify in NQH™, and build the pipeline that fills it.'):''}
-${L.gaps?`<div class="card dark"><div class="kicker" style="color:#F3D27A">Where NQH™ fits</div><h3>This gap is the reason we built NQH™</h3><p>Amaey and I saw it in our own practice first, and then in almost every healer who came to train with us. We had 16 modalities between us, and our sessions still felt improvised. NQH™ (Neurochakra Quantum Healing) holds the skills you already have inside one structure, so every week of a program works on mind, emotion and energy together.</p><p>You can finish this kit without it. If you want to fill these gaps properly, bring this Layer Lens to a free Practitioner Readiness Call.</p><p style="margin:0"><a class="btn gold" href="${CALL}-s4" target="_blank" rel="noopener">Bring my Layer Lens to a free Readiness Call →</a></p><p class="note" style="color:#E6DAF5;margin:8px 0 0">Pankaj</p></div>`:''}
+${L.gaps?`<div class="card dark"><div class="kicker" style="color:#F3D27A">Where NQH™ fits</div><h3>This gap is the reason we built NQH™</h3><p>Dr. Amaey Parekh and I saw it in our own practice first, and then in almost every healer who came to train with us. We had 35+ modalities between us, and our sessions still felt improvised. NQH™ (Neurochakra Quantum Healing) holds the skills you already have inside one structure of 16 core techniques across the 4 Pillars, taking each client through Remember, Release, Rewire and Reclaim, so every week of a 6, 9 or 12-week program works on mind, emotion and energy together.</p><p>You can finish this kit without it. If you want to fill these gaps properly, bring this Layer Lens to a free Practitioner Readiness Call.</p><p style="margin:0"><a class="btn gold" href="${CALL}-s4" target="_blank" rel="noopener">Bring my Layer Lens to a free Readiness Call →</a></p><p class="note" style="color:#E6DAF5;margin:8px 0 0">Pankaj</p></div>`:''}
 ${F('gapWeeks','The weeks where I am not sure what to do','','text',L.open.length?'Weeks '+L.open.join(', '):'')}
 ${F('gapPattern','What clients tell me when the same pattern comes back','','area')}
 ${AI('Get a deeper reading of my program','p4','AI reads your Week Map and coverage, and points out weeks that look vague or repeated.')}
@@ -370,18 +384,20 @@ ${nextPrev()}`}
 function math(){const W=52/12,price=num('pprice'),goal=num('goal'),r1=1/Math.max(1,num('r1')),r2=1/Math.max(1,num('r2'));
  const clients=price?Math.ceil(goal/price):0,fs=Math.ceil(clients/r1),conv=Math.ceil(fs/r2);
  const phrs=clients*(num('psess')*num('smin')+num('plen')*num('support'))/60,fhrs=fs*num('fmin')/60,tot=phrs+fhrs,cap=num('hours')*W;
- const inc=clients*price+fs*num('fsPrice'),single=num('single')?Math.ceil(goal/num('single')):0;
- return{clients,fs,conv,convwk:conv/W,phrs,fhrs,tot,cap,fits:tot<=cap,inc,perh:tot?inc/tot:0,single,singlewk:single/W,progwk:(clients*num('psess')+fs)/W,active:clients*num('plen')/W}}
+ const fsInc=fs*num('fsPrice'),inc=clients*price+fsInc,single=num('single')?Math.ceil(goal/num('single')):0;
+ const adCost=num('adCost'),adSpend=conv*adCost,adGst=adSpend*0.18,adTotal=adSpend+adGst,adDaily=Math.round(adSpend/30),adsFit=adSpend>0?(fsInc>=adTotal):null,netInc=inc-adTotal;
+ return{clients,fs,conv,convwk:conv/W,phrs,fhrs,tot,cap,fits:tot<=cap,fsInc,inc,perh:tot?inc/tot:0,single,singlewk:single/W,progwk:(clients*num('psess')+fs)/W,active:clients*num('plen')/W,adCost,adSpend,adGst,adTotal,adDaily,adsFit,netInc}}
 function st7(){const m=math();return `<div class="kicker">Station 7 · Module 5</div><h1>Does it add up?</h1><p class="lead">Start from the income you want. Work back to what it takes.</p>
 <div class="row">${F('goal','Monthly income goal from your program (₹)','','num')}${F('hours','Hours a week with clients','Only client work.','num')}</div>
 <div class="row">${F('single','Your current single-session fee (₹)','','num')}${F('smin','Minutes per program session, with prep','','num')}</div>
 <div class="row">${F('support','Support per program client per week (minutes)','','num')}${F('fmin','Minutes per first session, with prep','','num')}</div>
 <details class="card"><summary class="note" style="cursor:pointer"><b>Conversion rates (leave as they are for now)</b></summary><div class="row" style="margin-top:10px">${F('r1','1 in how many first sessions continue into the program?','Starting guess: 1 in 3','num')}${F('r2','1 in how many conversations book a first session?','Starting guess: 1 in 3','num')}</div></details>
+<details class="card"><summary class="note" style="cursor:pointer"><b>Optional: if you run ads (Module 5 · Check 4)</b></summary><div style="margin-top:10px">${F('adCost','What one conversation costs you in ads (₹)','Your ad spend divided by the conversations it brought. Leave at 0 if you do not run ads yet.','num')}</div></details>
 <p class="note">Using your program price ${rs(num('pprice'))}, ${esc(d.plen)} weeks, ${esc(d.psess)} sessions, and first session ${rs(num('fsPrice'))}. Change these in Stations 2 and 5.</p>
 <div class="card" id="mathOut">${mathOut(m)}</div>
 ${pk('s7','Your numbers now tell you how many conversations you need every week. The next question is where they will come from. Most healers rely on word of mouth and hope. We can plan this properly on the call.','in Phases 3 and 4 we set up your content, a simple funnel, discovery calls and Meta ads with you, so those conversations come in steadily.')}
 ${nextPrev()}`}
-function mathOut(m){return `<div class="stat"><span>Program clients you need each month</span><b>${m.clients}</b></div><div class="stat"><span>First sessions you need</span><b>${m.fs}</b></div><div class="stat"><span>Conversations you need</span><b>${m.conv} <small class="note">(about ${m.convwk.toFixed(1)} a week)</small></b></div><div class="stat"><span>Client hours each month, once programs overlap</span><b class="${m.fits?'ok':'no'}">${m.tot.toFixed(0)} of ${m.cap.toFixed(0)}</b></div><div class="stat"><span>Does it fit your hours?</span><b class="${m.fits?'ok':'no'}">${m.fits?'Yes':'Not yet: raise your price before adding clients'}</b></div><div class="stat"><span>Total income for the month</span><b>${rs(m.inc)}</b></div>
+function mathOut(m){return `<div class="stat"><span>Program clients you need each month</span><b>${m.clients}</b></div><div class="stat"><span>First sessions you need</span><b>${m.fs}</b></div><div class="stat"><span>Conversations you need</span><b>${m.conv} <small class="note">(about ${m.convwk.toFixed(1)} a week)</small></b></div><div class="stat"><span>Client hours each month, once programs overlap</span><b class="${m.fits?'ok':'no'}">${m.tot.toFixed(0)} of ${m.cap.toFixed(0)}</b></div><div class="stat"><span>Does it fit your hours?</span><b class="${m.fits?'ok':'no'}">${m.fits?'Yes':'Not yet: raise your price before adding clients'}</b></div><div class="stat"><span>Total income for the month</span><b>${rs(m.inc)}</b></div>${m.adCost>0?`<div class="stat"><span>Monthly ad spend + 18% GST</span><b>${rs(m.adTotal)} <small class="note">(${rs(m.adSpend)} + ${rs(m.adGst)} GST · ~${rs(m.adDaily)}/day)</small></b></div><div class="stat"><span>Do first sessions (${rs(m.fsInc)}) pay for the ads?</span><b class="${m.adsFit?'ok':'no'}">${m.adsFit?'Yes':'Not yet: raise first-session price or conversion'}</b></div><div class="stat"><span>Income after ads and GST</span><b>${rs(m.netInc)}</b></div>`:''}
 <h3>The Session Trap</h3><div class="trap"><div><span class="note">Single sessions only</span><strong>${m.singlewk.toFixed(0)} a week</strong><span class="note">${m.single} sessions a month for the same goal</span></div><div><span class="note">First session + program</span><strong>${m.progwk.toFixed(0)} a week</strong><span class="note">${m.clients} program clients and ${m.fs} first sessions a month</span></div></div><p style="margin:12px 0 0"><b>Same income. One version leaves you drained by Friday. The other leaves room for deeper work, and for your own life.</b></p>`}
 
 function onepager(){const S=stagesUsed(),signs=(d.signs||'').split('\n').filter(s=>s.trim()),ch=(d.changes||d.pchange||'').split('\n').filter(s=>s.trim()),inc=(d.pincl||'').split('\n').filter(s=>s.trim());
@@ -423,11 +439,24 @@ function runAI(id,to){const p=P[id]();if(to==='gpt'){copyText(p,true);window.ope
 async function copyText(t,quiet){try{await navigator.clipboard.writeText(t);if(!quiet)toast('Copied. Paste it into your AI chat.');else toast('Opening ChatGPT. The prompt is also copied, in case you need to paste it.')}catch(e){const a=document.createElement('textarea');a.value=t;document.body.append(a);a.select();try{document.execCommand('copy');toast('Copied.')}catch(_){toast('Copy did not work. Open "See the prompt" and copy it by hand.')}a.remove()}}
 
 /* ---------- render + bind ---------- */
-function render(){$('#nav').innerHTML=STATIONS.map((s,i)=>`<button class="${i===d.stage?'on':''}" data-go="${i}">${s.short}</button>`).join('');
+function stationDone(i){
+ if(i===0)return Boolean(d.name.trim()&&d.trainings.trim());
+ if(i===1)return Boolean((d.line||lineText()).trim());
+ if(i===2)return Boolean(d.fsName.trim()&&d.fsProblem.trim()&&num('fsPrice')>0);
+ if(i===3)return d.weeks.slice(0,Math.min(12,num('plen')||12)).some(w=>w.t.trim());
+ if(i===4)return lens().filled;
+ if(i===5)return Boolean(d.method.trim()&&d.pname.trim()&&num('pprice')>0);
+ if(i===6)return Boolean((d.nextline||nextLine()).trim());
+ if(i===7)return Boolean(num('goal')>0&&num('pprice')>0);
+ if(i===8)return Boolean(d.signs.trim()&&(d.pname.trim()||d.method.trim()));
+ return false;
+}
+function updateNav(){document.querySelectorAll('#nav button').forEach((b,i)=>{const done=stationDone(i);b.className=(i===d.stage?'on':'')+(done?' done':'');b.textContent=(done&&i!==0?'✓ ':'')+STATIONS[i].short})}
+function render(){$('#nav').innerHTML=STATIONS.map((s,i)=>{const done=stationDone(i);return `<button class="${i===d.stage?'on':''}${done?' done':''}" data-go="${i}">${done&&i!==0?'✓ ':''}${s.short}</button>`}).join('');
  $('#main').innerHTML=STATIONS[d.stage].render();bind();save();
  const on=$('#nav .on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});
  document.querySelectorAll('pre[id^=pv-]').forEach(p=>{const id=p.id.slice(3);try{p.textContent=P[id]()}catch(e){}})}
-function live(){if(d.stage===1&&$('#linePrev'))$('#linePrev').textContent=lineText()||'Your line appears here as you type.';
+function live(){updateNav();if(d.stage===1&&$('#linePrev'))$('#linePrev').textContent=lineText()||'Your line appears here as you type.';
  if(d.stage===5&&$('#mcard'))$('#mcard').innerHTML=mcard();
  if(d.stage===6&&$('#nlPrev')){$('#nlPrev').textContent=nextLine()||'Your next-step line appears here.';$('#scr').textContent=msgs().script}
  if(d.stage===7&&$('#mathOut'))$('#mathOut').innerHTML=mathOut(math());
@@ -470,9 +499,14 @@ function openApp(){$('#gate').style.display='none';$('#app').style.display='bloc
 function gate(){window.__openApp=openApp;let ok=false;try{ok=localStorage.getItem(KEY+'-ok')===ACCESS_HASH}catch(e){}
  if(ok)openApp()}
 $('#bk').onclick=()=>download('Signature Studio backup.json',JSON.stringify({v:1,d},null,1),'application/json');
-$('#rs').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const x=JSON.parse(await f.text());if(x.v!==1)throw 0;if(!confirm('Replace what is on this device with this backup?'))return;d=merge(x.d);render();toast('Backup restored.')}catch(_){toast('That file is not a Signature Studio backup.')}e.target.value=''};
-$('#ex').onclick=()=>{if(confirm('Load Ritu\'s example? This replaces what is on this device. Save a backup first if you have started.')){d=merge({...JSON.parse(JSON.stringify(D)),...EX,stage:4});render();toast('Ritu\'s example loaded. It is made up, for learning.')}};
-$('#clr').onclick=()=>{if(confirm('Clear everything on this device and start fresh?')){d=JSON.parse(JSON.stringify(D));render()}};
+let _confirmCb=null;
+function askConfirm(title,msg,cb){_confirmCb=cb;$('#modalTitle').textContent=title;$('#modalMsg').textContent=msg;$('#modalBg').style.display='flex'}
+$('#modalNo').onclick=()=>{$('#modalBg').style.display='none';_confirmCb=null};
+$('#modalYes').onclick=()=>{$('#modalBg').style.display='none';const cb=_confirmCb;_confirmCb=null;if(cb)cb()};
+$('#modalBg').onclick=e=>{if(e.target===$('#modalBg')){$('#modalBg').style.display='none';_confirmCb=null}};
+$('#rs').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const x=JSON.parse(await f.text());if(x.v!==1)throw 0;askConfirm('Restore backup?','Replace what is on this device with this backup?',()=>{d=merge(x.d);render();toast('Backup restored.')})}catch(_){toast('That file is not a Signature Studio backup.')}e.target.value=''};
+$('#ex').onclick=()=>askConfirm('Load Ritu\'s example?','This replaces what is on this device. Save a backup first if you have started.',()=>{d=merge({...JSON.parse(JSON.stringify(D)),...EX,stage:4});render();toast('Ritu\'s example loaded. It is made up, for learning.')});
+$('#clr').onclick=()=>askConfirm('Start fresh?','Clear everything on this device and start fresh?',()=>{d=JSON.parse(JSON.stringify(D));render();toast('Cleared. Ready to start fresh.')});
 gate();
 </script>
 </body>
