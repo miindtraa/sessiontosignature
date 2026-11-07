@@ -95,6 +95,12 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
 .trap{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .trap div{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
 .trap strong{display:block;font-size:24px;font-family:Georgia,serif;color:var(--indigo)}
+.callpill{background:var(--gold);color:#fff;text-decoration:none;font-weight:700;font-size:12.5px;padding:7px 12px;border-radius:999px;white-space:nowrap}
+@media(max-width:420px){.savedot{display:none}}
+.pk{background:#FFFBF2;border:1px solid #ead7ad;border-left:5px solid var(--gold);border-radius:14px;padding:16px 18px;margin:18px 0}
+.pk .pkh{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pk .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(160deg,#2D1B4E,#4A0D80);color:#F3D27A;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700}
+.pk .in{font-size:13.5px;color:#4b4456;background:#fff;border:1px dashed #e1cfa5;border-radius:10px;padding:8px 10px;margin:8px 0 10px}
 .foot{max-width:820px;margin:0 auto;padding:18px 16px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
 .navbtm{display:flex;justify-content:space-between;gap:10px;margin-top:24px}
 #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--indigo);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;display:none;z-index:50;max-width:92%}
@@ -141,7 +147,7 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
   <div class="top">
     <div class="bar">
       <div class="brand">miindtraa<small>SIGNATURE STUDIO</small></div>
-      <div class="savedot" id="saved">Saved on this device</div>
+      <div style="display:flex;align-items:center;gap:10px"><span class="savedot" id="saved">Saved on this device</span><a class="callpill" id="callpill" href="https://miindtraa.github.io/s2s-studio-k7p4/call.html?from=studio-top" target="_blank" rel="noopener">Book a call with Pankaj</a></div>
     </div>
     <nav class="nav" id="nav" aria-label="Stations"></nav>
   </div>
@@ -180,7 +186,7 @@ input:focus,textarea:focus,select:focus{outline:3px solid #d9c6ef;border-color:v
 'use strict';
 /* © 2026 Miindtraa School of Healing & Training. All rights reserved. Licensed for personal use by Sessions to Signature buyers. */
 const ACCESS_HASH='16763acd'; // hash of the kit access code (see team notes). To change it, run studioHash('NEWCODE') in the browser console and paste the result here.
-const CALL='https://nqhhealeracceleratorpage.miindtraa.com';
+const CALL='https://miindtraa.github.io/s2s-studio-k7p4/call.html?from=studio';
 const WA='https://chat.whatsapp.com/KzgfVh2dDQY4vfyuAl3iRp';
 const KEY='miindtraa-signature-studio-v2';
 const $=s=>document.querySelector(s);
@@ -212,6 +218,7 @@ function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';cl
 /* ---------- field helpers ---------- */
 function F(k,label,help='',type='text',ph=''){const v=esc(d[k]);const inp=type==='area'?`<textarea data-k="${k}" placeholder="${esc(ph)}">${v}</textarea>`:`<input type="${type==='num'?'number':'text'}" ${type==='num'?'inputmode="numeric" min="0"':''} data-k="${k}" value="${v}" placeholder="${esc(ph)}">`;return `<label class="f"><span>${label}</span>${inp}${help?`<small>${help}</small>`:''}</label>`}
 function AI(title,promptFn,what){return `<div class="ai"><div class="kicker">Ask AI to help</div><p style="margin:6px 0 4px"><b>${title}</b></p><p class="note">${what}</p><div class="btns"><button class="btn small" data-ai="${promptFn}" data-to="gpt">Open in ChatGPT</button><button class="btn ghost small" data-ai="${promptFn}" data-to="copy">Copy for Claude or Gemini</button></div><details><summary>See the prompt</summary><pre id="pv-${promptFn}"></pre></details><p class="note" style="margin-top:8px">ChatGPT opens with your prompt ready. Press send, then copy the answer you like back into the boxes here. Keep client names out of AI.</p></div>`}
+function pk(id,text,inside){return `<div class="pk noprint"><div class="pkh"><span class="av">P</span><b>A note from Pankaj</b></div><p style="margin:0 0 6px">${text}</p>${inside?`<div class="in"><b>Inside the NQH™ Healer Accelerator:</b> ${inside}</div>`:''}<a class="btn small gold" href="${CALL}-${id}" target="_blank" rel="noopener">Book my free Readiness Call →</a></div>`}
 function nextPrev(){const i=d.stage;return `<div class="navbtm noprint">${i>0?`<button class="btn ghost" data-go="${i-1}">← Back</button>`:'<span></span>'}${i<8?`<button class="btn" data-go="${i+1}">Next: ${STATIONS[i+1].short} →</button>`:''}</div>`}
 const RULES='Rules: use only the facts I give you. Do not invent qualifications, results, testimonials, techniques or medical claims. Plain, warm English that my clients would use. No jargon, no em dashes.';
 
@@ -236,6 +243,7 @@ ${F('name','Your name or practice name')}
 ${F('title','Your professional title','Only titles and qualifications you actually hold.')}
 ${F('contact','How clients reach you','WhatsApp number, email or Instagram handle.')}
 ${F('trainings','Your trainings and modalities','','area','For example: Reiki Level 2, EFT practitioner, counselling diploma')}
+${pk('welcome','You can build all of this on your own, and many healers do. If you would rather build it with me, book a free Practitioner Readiness Call now. Bring whatever you have, even an empty plan.','your program, your price and your method are built live with me and Amaey over 120 days, with 1:1 calls along the way.')}
 <div class="card gold"><b>Want to see a finished example first?</b><p class="note" style="margin:6px 0 0">Tap "Load Ritu's example" at the very bottom of the page. Save a backup of your own work first.</p></div>
 <p class="note">Join the kit community on WhatsApp: <a href="${WA}" target="_blank" rel="noopener">open the group</a></p>${nextPrev()}`}
 
@@ -248,6 +256,7 @@ ${F('problem','who are dealing with...','','text','a mind that keeps racing at n
 ${F('result','to...','','text','sleep better and feel calmer at home')}
 <div class="preview" id="linePrev">${esc(lineText())||'Your line appears here as you type.'}</div>
 <h3>Read it out loud</h3><div class="checks"><label><input type="checkbox">A stranger could tell exactly who this is for</label><label><input type="checkbox">They would complain about this problem to a friend</label><label><input type="checkbox">They would happily pay to reach the result sooner</label></div>
+${pk('s1','Two kinds of clients both scored high and you cannot let go of either? That happens to almost every healer who has helped many people. Choosing one is usually the first thing we settle together on a Readiness Call.','in Phase 2, I take your niche through a live hot-seat with the group, and we lock it together on a 1:1 Foundation Call.')}
 ${AI('Sharpen my line and write my Instagram bio','p1','Gets you 3 sharper versions of your line and a bio under 150 characters.')}
 ${F('line','My final line','Paste the version you chose, or keep your own.','area')}
 ${F('bio','My Instagram bio','Under 150 characters.','area')}
@@ -265,6 +274,7 @@ ${F('fsNot','What is NOT inside','Anything that goes into the deeper root belong
 ${F('fsFormat','Format','Online, in person or a small group.')}
 <h3>The door test</h3><div class="checks">${q.map((t,i)=>`<label><input type="checkbox" data-door="${i}" ${d.door[i]?'checked':''}>${t}</label>`).join('')}</div>
 <p>Score: <span class="score" id="doorScore">${doorScore()} of 5</span>. <span class="note">Aim for 5. If a step works on a second problem, move it to "NOT inside".</span></p>
+${pk('s2','Not sure whether to charge for the first session, or how much? This is where most healers either undercharge or give it away free. We look at your fees together on the call.','we build your whole offer with you, from the paid first session to a premium program, and practise how you talk about it.')}
 ${AI('Check my first session','p2','Gets you a tighter First Session Sheet and an overstuff check.')}
 <p class="note">Copy this into Section 2 of your plan.</p>${nextPrev()}`}
 
@@ -274,6 +284,7 @@ ${F('question','What does a happy first-session client ask you as they leave?','
 <div class="row"><label class="f"><span>Program length</span><select data-k="plen">${[6,9,12].map(x=>`<option value="${x}" ${+d.plen===x?'selected':''}>${x} weeks</option>`).join('')}</select></label>${F('psess','Number of sessions','','num')}</div>
 <div class="card tint" style="padding:12px 14px"><span class="note"><b style="color:var(--m)">Mind</b>: thoughts, beliefs, the story they tell themselves. <b style="color:var(--e)">Emotion</b>: feelings held in the body. <b style="color:var(--n)">Energy</b>: chakras, the energy field, how they feel in their body and space.</span></div>
 ${w}
+${pk('s3','If the weeks start to look the same after week 3 or 4, you are not doing anything wrong. That is the point where most methods run out. It is the exact gap NQH™ was built to fill, and the first thing I look at on a Readiness Call.','in Phase 1 you learn NQH™: 16 core techniques across the 4 Pillars, practised on real cases, so every week of your program has a clear purpose.')}
 ${AI('Draft my Week Map from my trainings','p3','Useful if you are not sure where to start. AI drafts a first version using only your trainings. Then paste it below and the Studio fills your weeks.')}
 <label class="f"><span>Paste AI's Week Map here (optional)</span><textarea id="wkPaste" placeholder="Week 1: ... [Mind] [Emotion]"></textarea><small>One line per week, starting with "Week 1:". Tags like [Mind], [Emotion], [Energy] are read automatically.</small></label>
 <button class="btn ghost small" id="wkApply">Fill my weeks from this</button>${nextPrev()}`}
@@ -310,7 +321,8 @@ return `<div class="kicker">Station 4 · Module 3</div><h1>Your Layer Lens™</h
 <div class="lgrid"><table><tr><th>Week</th><th>What happens</th><th>Mind</th><th>Emotion</th><th>Energy</th></tr>${rows}</table></div>
 <h2>Why this matters</h2><p>A person holds a pattern in their mind, their emotions and their energy at the same time. Work on one, and the other two can pull it back. This is why so many clients feel light after a session and come back three weeks later with the same thing.</p>
 <p>It matters for your price too. A client says yes to a 12-week program when they can see a reason behind every week. Open weeks are hard to explain, and harder to charge for.</p>
-${L.gaps?`<div class="card dark"><div class="kicker" style="color:#F3D27A">Where NQH™ fits</div><h3>This gap is the reason we built NQH™</h3><p>Amaey and I saw it in our own practice first, and then in almost every healer who came to train with us. We had 16 modalities between us, and our sessions still felt improvised. NQH™ (Neurochakra Quantum Healing) holds the skills you already have inside one structure, so every week of a program works on mind, emotion and energy together.</p><p>You can finish this kit without it. If you want to fill these gaps properly, bring this Layer Lens to a free Practitioner Readiness Call.</p><p style="margin:0"><a href="${CALL}" target="_blank" rel="noopener"><b>Book your Practitioner Readiness Call →</b></a></p><p class="note" style="color:#E6DAF5;margin:8px 0 0">Pankaj</p></div>`:''}
+${!L.gaps?pk('s4','Your Lens looks strong. On a Readiness Call we can look at how you would explain it to a client, and what a 12-week program at a premium price would need from you.','you take a program like this, certify in NQH™, and build the pipeline that fills it.'):''}
+${L.gaps?`<div class="card dark"><div class="kicker" style="color:#F3D27A">Where NQH™ fits</div><h3>This gap is the reason we built NQH™</h3><p>Amaey and I saw it in our own practice first, and then in almost every healer who came to train with us. We had 16 modalities between us, and our sessions still felt improvised. NQH™ (Neurochakra Quantum Healing) holds the skills you already have inside one structure, so every week of a program works on mind, emotion and energy together.</p><p>You can finish this kit without it. If you want to fill these gaps properly, bring this Layer Lens to a free Practitioner Readiness Call.</p><p style="margin:0"><a class="btn gold" href="${CALL}-s4" target="_blank" rel="noopener">Bring my Layer Lens to a free Readiness Call →</a></p><p class="note" style="color:#E6DAF5;margin:8px 0 0">Pankaj</p></div>`:''}
 ${F('gapWeeks','The weeks where I am not sure what to do','','text',L.open.length?'Weeks '+L.open.join(', '):'')}
 ${F('gapPattern','What clients tell me when the same pattern comes back','','area')}
 ${AI('Get a deeper reading of my program','p4','AI reads your Week Map and coverage, and points out weeks that look vague or repeated.')}
@@ -332,6 +344,7 @@ ${F('pnot','What is NOT included','','text','Unlimited calls, emergency support'
 ${F('plimits','Support limits','','text','One WhatsApp check-in a week, replies within 2 working days')}
 <div class="row">${F('pmax','Maximum clients at one time','','num')}${F('pprice','Program price (₹)','Price the whole change, not a count of sessions. Pick a number that feels a little uncomfortable to say out loud.','num')}</div>
 <div class="card tint"><p style="margin:0">Shamta, one of our NQH™ practitioners, was charging ₹500 per session. She went on to sign a ₹33,000 client. Inside the NQH™ Healer Accelerator, practitioners build programs that start at around ₹25,000.</p></div>
+${pk('s5','Did your stomach tighten when you typed that price? For most healers it is not the number. It is an old belief about money and healing. We talk about what is behind it on the call.','Phase 2 includes a Money-Belief Reset, where you use NQH™ on your own money blocks before you ever say your price to a client.')}
 ${nextPrev()}`}
 function stagesUsed(){return d.stages.filter(s=>s.n.trim())}
 function mcard(){const S=stagesUsed();return `<div class="mcard"><div class="kicker">${esc(d.name)||'Your name'}'s signature method</div><h2>${esc(d.method)||'Your method name'}</h2><p style="color:#E6DAF5;margin:0 0 8px">${esc(d.pname)||'Your program'}${d.plen?' · '+esc(d.plen)+' weeks':''}</p>${(S.length?S:[{n:'Stage name',w:'weeks',c:'What changes for your client'}]).map((s,i)=>`<div class="st"><b>${i+1}</b><div><strong>${esc(s.n)}</strong>${s.w?` <small style="display:inline">· week ${esc(s.w)}</small>`:''}<small>${esc(s.c)}</small></div></div>`).join('')}</div>`}
@@ -350,6 +363,7 @@ ${F('nextline','My final next-step line','Edit it until you could say it out lou
 <h3>Your end-of-session script</h3><pre class="card" style="white-space:pre-wrap;font:14px/1.6 inherit" id="scr">${esc(M.script)}</pre><button class="btn ghost small" data-copy="script">Copy script</button>
 <h3>Same-evening WhatsApp</h3><div class="card">${esc(M.evening)}</div><button class="btn ghost small" data-copy="evening">Copy message</button>
 <h3>A message for past clients</h3><div class="card">${esc(M.past)}</div><button class="btn ghost small" data-copy="past">Copy message</button>
+${pk('s6','If saying the price is where you always start discounting, you are not alone. I did it for years. On a Readiness Call we look at how you talk about your work, and what is behind the hesitation.','in Phase 3 we run live sales drills every week, and you learn the discovery call system we use ourselves.')}
 ${AI('Practise saying my price','p6','AI plays your client at the end of a first session, asks the price and says "let me think about it". Then it tells you if you sounded calm and clear, or rushed and apologetic.')}
 ${nextPrev()}`}
 
@@ -364,7 +378,9 @@ function st7(){const m=math();return `<div class="kicker">Station 7 · Module 5<
 <div class="row">${F('support','Support per program client per week (minutes)','','num')}${F('fmin','Minutes per first session, with prep','','num')}</div>
 <details class="card"><summary class="note" style="cursor:pointer"><b>Conversion rates (leave as they are for now)</b></summary><div class="row" style="margin-top:10px">${F('r1','1 in how many first sessions continue into the program?','Starting guess: 1 in 3','num')}${F('r2','1 in how many conversations book a first session?','Starting guess: 1 in 3','num')}</div></details>
 <p class="note">Using your program price ${rs(num('pprice'))}, ${esc(d.plen)} weeks, ${esc(d.psess)} sessions, and first session ${rs(num('fsPrice'))}. Change these in Stations 2 and 5.</p>
-<div class="card" id="mathOut">${mathOut(m)}</div>${nextPrev()}`}
+<div class="card" id="mathOut">${mathOut(m)}</div>
+${pk('s7','Your numbers now tell you how many conversations you need every week. The next question is where they will come from. Most healers rely on word of mouth and hope. We can plan this properly on the call.','in Phases 3 and 4 we set up your content, a simple funnel, discovery calls and Meta ads with you, so those conversations come in steadily.')}
+${nextPrev()}`}
 function mathOut(m){return `<div class="stat"><span>Program clients you need each month</span><b>${m.clients}</b></div><div class="stat"><span>First sessions you need</span><b>${m.fs}</b></div><div class="stat"><span>Conversations you need</span><b>${m.conv} <small class="note">(about ${m.convwk.toFixed(1)} a week)</small></b></div><div class="stat"><span>Client hours each month, once programs overlap</span><b class="${m.fits?'ok':'no'}">${m.tot.toFixed(0)} of ${m.cap.toFixed(0)}</b></div><div class="stat"><span>Does it fit your hours?</span><b class="${m.fits?'ok':'no'}">${m.fits?'Yes':'Not yet: raise your price before adding clients'}</b></div><div class="stat"><span>Total income for the month</span><b>${rs(m.inc)}</b></div>
 <h3>The Session Trap</h3><div class="trap"><div><span class="note">Single sessions only</span><strong>${m.singlewk.toFixed(0)} a week</strong><span class="note">${m.single} sessions a month for the same goal</span></div><div><span class="note">First session + program</span><strong>${m.progwk.toFixed(0)} a week</strong><span class="note">${m.clients} program clients and ${m.fs} first sessions a month</span></div></div><p style="margin:12px 0 0"><b>Same income. One version leaves you drained by Friday. The other leaves room for deeper work, and for your own life.</b></p>`}
 
@@ -390,7 +406,7 @@ ${AI('Write my One-Pager wording','p8','Gets you the "for you if" signs and "wha
 <div class="card"><h3 style="margin-top:0">Your line</h3><p>${esc(d.line||lineText())||'<i>Station 1</i>'}</p><h3>Your bio</h3><p>${esc(d.bio)||'<i>Station 1</i>'}</p><h3>Your first session</h3><p>${esc(d.fsName)||'<i>Station 2</i>'}${d.fsName?' · '+esc(d.fsLength)+' · '+rs(num('fsPrice')):''}</p><h3>Your Layer Lens™</h3><p>${L.filled?`Mind ${L.c.m} of ${L.n} · Emotion ${L.c.e} of ${L.n} · Energy ${L.c.n} of ${L.n} · Open weeks ${L.open.length}`:'<i>Station 4</i>'}</p><h3>Your next-step line</h3><p>${esc(d.nextline||nextLine())||'<i>Station 6</i>'}</p></div>
 ${mcard()}
 <div class="btns noprint"><button class="btn ghost" id="txt">Download my whole pack (.txt)</button></div>
-<div class="card dark" style="margin-top:22px"><div class="kicker" style="color:#F3D27A">Your next step</div><h3>"You've got your one line, your first session, your program and your numbers. The next part is a method that carries a client through every week of that program, and a steady flow of people to fill it. That's what the NQH™ Healer Accelerator is for."</h3>${L.gaps?`<p>Your Layer Lens shows ${L.open.length} open week${L.open.length===1?'':'s'}${L.low.length?` and a ${L.low.map(k=>({m:'mind',e:'emotion',n:'energy'})[k]).join(' and ')} layer that stays mostly empty`:''}. That is exactly what we look at first on a Practitioner Readiness Call.</p>`:'<p>Bring your plan and your Layer Lens to a free Practitioner Readiness Call. We look at your practice, where you want it to go and what is in the way.</p>'}<p style="margin:0"><a href="${CALL}" target="_blank" rel="noopener"><b>Book your Practitioner Readiness Call →</b></a></p></div>
+<div class="card dark" style="margin-top:22px"><div class="kicker" style="color:#F3D27A">Your next step</div><h3>"You've got your one line, your first session, your program and your numbers. The next part is a method that carries a client through every week of that program, and a steady flow of people to fill it. That's what the NQH™ Healer Accelerator is for."</h3>${L.gaps?`<p>Your Layer Lens shows ${L.open.length} open week${L.open.length===1?'':'s'}${L.low.length?` and a ${L.low.map(k=>({m:'mind',e:'emotion',n:'energy'})[k]).join(' and ')} layer that stays mostly empty`:''}. That is exactly what we look at first on a Practitioner Readiness Call.</p>`:'<p>Bring your plan and your Layer Lens to a free Practitioner Readiness Call. We look at your practice, where you want it to go and what is in the way.</p>'}<p style="margin:0"><a class="btn gold" href="${CALL}-s8" target="_blank" rel="noopener">Book my free Readiness Call with Pankaj →</a></p></div>
 ${nextPrev()}`}
 
 /* ---------- AI prompts ---------- */
@@ -400,7 +416,7 @@ const P={
  p3:()=>`I am a ${d.title||'healing practitioner'} trained in: ${d.trainings||'[my trainings]'}. My line: "${d.line||lineText()}". My first session: ${d.fsName} (${d.fsProblem}).\nDraft a ${d.plen}-week 1:1 program with ${d.psess} sessions, using ONLY methods from my trainings. Write exactly one line per week in this format:\nWeek 1: [what happens] [Mind] [Emotion] [Energy]\nOnly add the tags that the session truly works on. Mind = thoughts and beliefs. Emotion = feelings held in the body. Energy = chakras and the energy field. If a week has no clear purpose, write "Not sure". Output only the ${d.plen} lines.\n${RULES}`,
  p4:()=>{const L=lens();return `Here is my ${L.n}-week program, with the layers each week works on:\n${L.W.map((w,i)=>`Week ${i+1}: ${w.t||'(empty)'} ${L.isOpen(w)?'[Open]':['m','e','n'].filter(k=>w[k]).map(k=>'['+({m:'Mind',e:'Emotion',n:'Energy'})[k]+']').join(' ')}`).join('\n')}\nCoverage: Mind ${L.c.m}, Emotion ${L.c.e}, Energy ${L.c.n} of ${L.n} weeks. Open weeks: ${L.open.join(', ')||'none'}.\n\nIn plain words: which weeks look vague or repeated, is there a reason behind the order, and what would a client likely feel around the open weeks? Do not suggest specific healing techniques or protocols. Keep it under 200 words.\n${RULES}`},
  p5:()=>{const L=lens();return `My ${L.n}-week program for ${d.who||'my clients'}:\n${L.W.map((w,i)=>`Week ${i+1}: ${w.t||'(open)'}`).join('\n')}\n\nGroup the weeks into 3, 4 or 5 stages. For each stage give: a plain name of one or two words, the weeks, and one line on what changes for the client in their own words. Then suggest 3 warm, simple names for the whole method, like "The Calm Within Method". Do not use the words quantum, NQH or chakra in the names.\n${RULES}`},
- p6:()=>`Practise with me. I am a ${d.title||'practitioner'}. My first session is "${d.fsName||'[first session]'}". My program is "${d.pname||'[program]'}": ${d.plen} weeks, ${d.psess} sessions, ₹${num('pprice')}. My next-step line: "${d.nextline||nextLine()}".\n\nPlay my client at the end of a first session. Ask me, one message at a time: what happens next, how the program works, what it costs. Then say "Let me think about it" once. Wait for my reply each time. After the last turn, tell me honestly whether I sounded calm and clear, or rushed and apologetic, and whether I offered a discount nobody asked for. Keep your client messages short and natural.`,
+ p6:()=>`Practise with me. I am a ${d.title||'practitioner'}. My first session is "${d.fsName||'[first session]'}". My program is "${d.pname||'[program]'}": ${d.plen} weeks, ${d.psess} sessions, ₹${num('pprice')}. My next-step line: "${d.nextline||nextLine()}".\n\nPlay my client at the end of a first session. Ask me, one message at a time: what happens next, how the program works, what it costs. Then say "Let me think about it" once. Wait for my reply each time. After the last turn, tell me plainly whether I sounded calm and clear, or rushed and apologetic, and whether I offered a discount nobody asked for. Keep your client messages short and natural.`,
  p8:()=>`My program "${d.pname}" (${d.method}) is for: ${d.who}, dealing with ${d.problem}. The change they can expect: ${d.pchange}.\nWrite: (1) three short "This program is for you if..." signs that my client would recognise in their daily life, one line each, starting with "You"; (2) three short "What changes" lines in the client's words. No medical promises, no guarantees. Output only the 6 lines under the two headings.\n${RULES}`,
 };
 function runAI(id,to){const p=P[id]();if(to==='gpt'){copyText(p,true);window.open('https://chatgpt.com/?q='+encodeURIComponent(p),'_blank','noopener')}else copyText(p)}
